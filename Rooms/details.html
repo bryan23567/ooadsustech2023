@@ -6,8 +6,11 @@
     <title>Building 1 Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <link rel="stylesheet" href = "css/styleroom.css">
-    <script type="module" src="detail_script.js"></script>
-    <script type="module" src="/global.js"></script>
+    <!-- <script src="../global.js" type="module" ></script> -->
+    <script src="detail_script.js" type="module" defer></script>
+    <!-- <script src="/global.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
@@ -32,7 +35,8 @@
 
     <main>
         <aside class="details-left">
-            <button onclick="editPic()">edit picture</button>
+            <button id="editPicBtn">edit picture</button>
+            <!-- <button onclick>edit picture</button> -->
 
             <img id="image1" alt="yidan-lib">
             <img id="image2" alt="our-photos">
@@ -133,5 +137,6 @@
     </footer>
 
 </body>
+
 
 </html>

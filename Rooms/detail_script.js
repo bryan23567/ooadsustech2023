@@ -1,8 +1,10 @@
 // Link to the Backend API
 // ------------------------------------------------------------------------------------------------------
+import { uri_api } from "../global.js";
 
-import { api_domain } from "../global.js";
-const apiUrl = api_domain + 'api/building/6cf4a19e-d547-4e00-b2b2-cb44e1cd3123';
+console.log('hellos')
+const apiUrl = uri_api + '/api/building/6cf4a19e-d547-4e00-b2b2-cb44e1cd3123';
+
 
 // Define the headers for the request
 const headers = new Headers({
@@ -164,9 +166,8 @@ const uploadImages = async () => {
     }
 };
 
-document.getElementById('uploadButton').addEventListener('click', uploadImages);
-
 function editPic() {
+    console.log('pop')
     Swal.fire({
         title: '<strong>uoload picture</strong>',
      
@@ -186,3 +187,11 @@ function editPic() {
      
     })
 }
+
+document.getElementById('editPicBtn').addEventListener('click', editPic);
+
+
+document.getElementById('uploadButton').addEventListener('click', uploadImages);
+
+
+
