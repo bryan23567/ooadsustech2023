@@ -108,6 +108,7 @@ header nav a:focus {
 .left{
     float: left;
     background-color: rgb(0, 128, 128);
+    margin-left: 10px;
 }
 .right{
     float: right;
@@ -117,7 +118,7 @@ header nav a:focus {
     margin-right: 200px;
 }
 table.table-building,
-.right table.plans-table{
+.details-right table.plans-table{
     width: 600px;
     height: auto;
 }
@@ -137,14 +138,14 @@ button {
 }
 
 table.table-building th,
-.right table.plans-table th{
+.details-right table.plans-table th{
     background-color: rgb(0, 128, 128);
     text-align: center;
     border: rgb(133, 193, 201) 1px;
     height: 50px;
 }
 table.table-building td,
-.right table.plans-table td{
+.details-right table.plans-table td{
     background-color: rgb(193, 232, 232);
     border: rgb(124, 199, 209) 1px;
     margin-left: 5px;
@@ -152,32 +153,32 @@ table.table-building td,
 }
 table.table-building tr #num-building-facility-id,
 table.table-building tr #loc-building-facility-id,
-.right table.plans-table tr #num-plans,
-.right table.plans-table tr #plan-loc{
+.details-right table.plans-table tr #num-plans,
+.details-right table.plans-table tr #plan-loc{
     text-align: center;
 }
 table.table-building tr:last-child,
-.right table.plans-table tr:last-child{
+.details-right table.plans-table tr:last-child{
 	-webkit-border-radius:25px 25px 0 0;
 	border-radius: 0 0 25px 25px;
 }
 table.table-building tr:first-child>th:first-child,
-.right table.plans-table tr:first-child>th:first-child{
+.details-right table.plans-table tr:first-child>th:first-child{
 	-webkit-border-radius: 15px 0 0 0;
 	border-radius: 15px 0 0 0;
 }
 table.table-building tr:first-child>th:last-child,
-.right table.plans-table tr:first-child>th:last-child{
+.details-right table.plans-table tr:first-child>th:last-child{
 	-webkit-border-radius: 0 15px 0 0;
 	border-radius: 0 15px 0 0;
 }
 table.table-building tr:last-child>td:first-child,
-.right table.plans-table tr:last-child>td:first-child{
+.details-right table.plans-table tr:last-child>td:first-child{
 	-webkit-border-radius: 0 0 0 15px;
 	border-radius: 0 0 0 15px;
 }
 table.table-building tr:last-child>td:last-child,
-.right table.plans-table tr:last-child>td:last-child{
+.details-right table.plans-table tr:last-child>td:last-child{
 	-webkit-border-radius: 0 0 15px 0;
 	border-radius: 0 0 15px 0;
 }
