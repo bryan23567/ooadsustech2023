@@ -112,6 +112,10 @@ header nav a:focus {
 .right{
     float: right;
 }
+.details-right {
+    float: right;
+    margin-right: 250px;
+}
 table.table-building,
 .right table.plans-table{
     width: 600px;
