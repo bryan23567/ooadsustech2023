@@ -35,8 +35,9 @@
         </aside>
         <aside class="right">
             <h2>About</h2>
-            <p>Building 1 is located next to lakeside, easily access by cafeteria 1, Yidan Library, bla bla bla.<br><button class="edit-desc-button">edit</button></p>
-            <form id="edit-desc">
+            <p>Building 1 is located next to lakeside, easily access by cafeteria 1, Yidan Library, bla bla bla.<br>
+                <button class="edit-desc-button" onclick="displayDescription()">edit</button></p>
+            <form id="edit-desc" style="display: none;" onsubmit="addDescription()">
                 <label for="bulding-about">add description:<br></label>
                 <input type="text" id="building-about" name="building-about" required>
                 <br>
