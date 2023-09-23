@@ -194,15 +194,15 @@ table.table-building tr:last-child>td:last-child,
 .left-even div, .right-odd div {
     padding-top: 30px;
     padding-bottom: 30px;
-    padding-left: 75px;
-    padding-right: 75px;
+    padding-left: 60px;
+    padding-right: 60px;
     border: black solid 1px;
 }
 .left-even div {
-    margin-right: 60px;
+    margin-right: 40px;
 }
 .right-odd div {
-    margin-left: 60px;
+    margin-left: 40px;
 }
 
 .left div a{
