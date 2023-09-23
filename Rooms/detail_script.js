@@ -22,8 +22,8 @@ fetch(request)
             throw new Error('Network response was not ok');
         }
         return response.json(); // Parse the response JSON
-        })
-        .then(data => {
+    })
+    .then(data => {
         // Print the response body
         console.log('Response Body:', data);
 
@@ -85,7 +85,7 @@ function displayFacilityBuildingTable(facilities) {
 function displayPlanBuildingTable(plans) {
     var tableBody = document.querySelector('.plans-table tbody');
 
-    plans.forEach(function(plan) {
+    plans.forEach(function (plan) {
         var newRow = document.createElement('tr');
 
         var planName = plan.plan;
@@ -124,4 +124,65 @@ function displayBuildingPicture(pictures) {
             img3.style.display = 'block'; // Show the third image
         }
     }
+}
+
+// script.js
+const uploadImages = async () => {
+    const { value: file } = await Swal.fire({
+        title: 'Upload Images',
+        input: 'file',
+        inputAttributes: {
+            multiple: 'multiple',
+            accept: 'image/*',
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Upload',
+        inputValidator: (value) => {
+            if (!value) {
+                return 'You need to select at least one image to upload';
+            }
+        },
+    });
+
+    if (file) {
+        const images = Array.from(file);
+        const imageContainer = document.querySelector('.details-left');
+
+        // Display up to three selected images
+        for (let i = 0; i < Math.min(images.length, 3); i++) {
+            const img = new Image();
+            img.src = URL.createObjectURL(images[i]);
+            img.onload = function () {
+                const existingImage = imageContainer.querySelector(`#image${i + 1}`);
+                if (existingImage) {
+                    existingImage.src = this.src;
+                }
+            };
+        }
+
+        // You can handle the uploaded images as needed here.
+    }
+};
+
+document.getElementById('uploadButton').addEventListener('click', uploadImages);
+
+function editPic() {
+    Swal.fire({
+        title: '<strong>uoload picture</strong>',
+     
+        html:
+            `
+            <form id="imageUploadForm" enctype="multipart/form-data">
+            <label for="imageInput">Select up to 3 images:</label>
+            <input type="file" id="imageInput" name="image" accept="image/*" multiple>
+            <button type="submit">Upload</button>
+        </form>
+            `,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        showConfirmButton:true
+     
+     
+    })
 }
