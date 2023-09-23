@@ -1,84 +1,54 @@
-function addFacilityFloor(){
+function addFacilityBuilding(){
+    console.log("Add Facility Floor!")
     var name = document.getElementById("facility-name-floor").value;
     var amount = document.getElementById("facility-amount-floor").value;
 
-    var newRow = document.createElement("tr");
+    const table = document.getElementById(".table-building");
 
-    newRow.innerHTML = `
-        <td>${name}</td>
-        <td>${amount}</td>
-        <td>
-            <button>edit</button>
-            <button class="delete-facility-floor" onclick="deleteRow(this)">delete</button>
-        </td>
+    const row = table.insertRow(-1);
+    row.insertCell(0).textContent = name;
+    row.insertCell(1).textContent = 'Floor ' + amount;
+    row.insertCell(2).innerHTML = `
+    <button>edit</button>
+    <button class="delete-facility-building" onclick="deleteRow(this)">delete</button>
     `;
-
-    var tableBody = document.getElementsByClassName("table-floor");
-    tableBody.appendChild(newRow);
+    
 
     return false;
 }
 
-function deleteRow(button){
-    var row = button.parentNode.parentNode;
 
-    row.remove();
+function displayAddFacilityBuilding() {
+    var showButton = document.getElementById("add-facilities-building");
+    var addFacilityBuildingForm = document.getElementById("facility-building-form");
+
+    if (addFacilityBuildingForm.style.display === "none" || addFacilityBuildingForm.style.display === "") {
+        addFacilityBuildingForm.style.display = "block";
+    } else {
+        addFacilityBuildingForm.style.display = "none";
+    }
 }
 
-// script.js
-document.addEventListener("DOMContentLoaded", function () {
-    var addButton = document.getElementById("add-occupying");
-    var form = document.getElementById("add-occupying-form");
+function displayAddPlan(){
+    var showButton = document.getElementById("add-plan");
+    var addPlanForm = document.getElementById("plan-building-form");
 
-    addButton.addEventListener("click", function () {
-        if (form.style.display === "none" || form.style.display === "") {
-            form.style.display = "block";
-        } else {
-            form.style.display = "none";
-        }
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    var addButton = document.getElementById("add-facilities-floor");
-    var form = document.getElementById("facility-form");
-
-    addButton.addEventListener("click", function () {
-        if (form.style.display === "none" || form.style.display === "") {
-            form.style.display = "block";
-        } else {
-            form.style.display = "none";
-        }
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    var addButton = document.getElementById("room-id");
-    var form = document.getElementById("occupying-info");
-
-    addButton.addEventListener("click", function () {
-        if (form.style.display === "none" || form.style.display === "") {
-            form.style.display = "block";
-        } else {
-            form.style.display = "none";
-        }
-    });
-});
-
-document.getElementById("login-icon").addEventListener("click", function() {
-    var dropdownContent = document.getElementById("dropdown-content");
-    if (dropdownContent.style.display === "block") {
-      dropdownContent.style.display = "none";
-    } else {
-      dropdownContent.style.display = "block";
+    if(addPlanForm.style.display == "none" || addPlanForm.style.display == ""){
+        addPlanForm.style.display = "block";
     }
-  });
-  
-  // Close the dropdown when clicking outside of it
-  window.addEventListener("click", function(event) {
-    var dropdownContent = document.getElementById("dropdown-content");
-    if (!event.target.matches("#login-icon") && !event.target.matches(".dropdown-content")) {
-      dropdownContent.style.display = "none";
+    else{
+        addPlanForm.style.display = "none";
     }
-  });
+
+}
+
+
+function deleteRow(button){
+    if(confirm("Are you sure you want to delete?")){
+        var row = button.parentNode.parentNode;
+        row.remove();
+    }
+}
+
+
   

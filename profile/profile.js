@@ -1,7 +1,6 @@
 
 
-document.addEventListener("DOMContentLoaded", function(){
-    const profile = document.getElementsByClassName("container");
+function sendUserInfo(){
 
-    
-})
+    const fullName = document.querySelector()
+}

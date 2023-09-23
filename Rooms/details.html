@@ -73,10 +73,10 @@
                     <td class="operate-building"><button>edit</button><button class="delete-facility-building" onclick="deleteRow(this)">delete</button></td>
                 </tr>
             </table>
-            <button id="add-facilities-building">
+            <button id="add-facilities-building" onclick="displayAddFacilityBuilding()">
                   add facility
             </button>
-            <form id="facility-building-form" onsubmit="return addFacilityFloor()">
+            <form id="facility-building-form" style="display: none;" onsubmit="return addFacilityFloor()">
                 <label for="facility-name-building">Name:</label>
                 <input type="text" id="facility-name-building" name="facility-name-building" required>
                 <br>
@@ -98,18 +98,19 @@
                     <td><button>edit</button><button class="delete-building-plan" onclick="deleteRow(this)">delete</button></td>
                 </tr>  
             </table>
-            <button id="add-plan">
+            <button id="add-plan" onclick="displayAddPlan()">
                 add plan
             </button>
-            <form id="plan-building-form" onsubmit="return addFacilityFloor()">
-                <label for="plan-name">Plan:</label>
-                <input type="text" id="facility-name-building" name="facility-name-building" required>
+            <form id="plan-building-form" style="display: none;" onsubmit="return addPlan()">
+                <label for="plan-name-building">Plan:</label>
+                <input type="text" id="plan-name-building" name="plan-name-building" required>
                 <br>
                 <label for="loc-plan">Location:</label>
-                <input type="number" id="loc-plan" name="loc-plan" required>
+                <input type="text" id="loc-plan" name="loc-plan" required>
                 <br>
                 <button type="submit">add</button>
             </form>
+            
         </aside>
     </main>
     <footer>
