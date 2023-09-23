@@ -5,7 +5,7 @@
     <title>Building 1 Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <link rel="stylesheet" href = "css/styleroom.css">
-    <script src="scriptroom.js"></script>
+    <script src="detail_script.js"></script>
 </head>
 <body>
     <header>
@@ -20,7 +20,7 @@
             </ul>
         </div>
         <nav>
-            <h1>Building 1</h1>
+            <h1 id="building-name"></h1>
             <a href="details.html" class="active"><b>Details</b></a>
             <a href="map.html"><b>Map</b></a>
         </nav>
@@ -28,14 +28,14 @@
     </header>
 
     <main>
-        <aside class="left">
-            <img src="pics/yidan.jpeg" alt="yidan-lib">
-            <img src="pics/us.jpeg" alt="our-photos">
-            <img src="pics/bridge.jpeg" alt="bridge">
+        <aside class="details-left">
+            <img id="image1"  alt="yidan-lib">
+            <img id="image2"  alt="our-photos">
+            <img id="image3"  alt="bridge">
         </aside>
         <aside class="details-right">
-            <h2>About</h2>
-            <p>Building 1 is located next to lakeside, easily access by cafeteria 1, Yidan Library, bla bla bla.<br>
+            <h2>Location</h2>
+            <p class="building-loc"><br>
                 <button class="edit-desc-button" onclick="displayDescription()">edit</button></p>
             <form id="edit-desc" style="display: none;" onsubmit="addDescription()">
                 <label for="bulding-about">add description:<br></label>
@@ -50,7 +50,7 @@
                     <th>Location</th>
                     <th>operation</th>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td id="name-building-facility-id">Activity Room</td>
                     <td id="loc-building-facility-id">1st floor</td>
                     <td class="operate-building"><button>edit</button><button class="delete-facility-building" onclick="deleteRow(this)">delete</button></td>
@@ -72,7 +72,7 @@
                     <td id="name-building-facility-id">Music Room</td>
                     <td id="loc-building-facility-id">1st floor</td>
                     <td class="operate-building"><button>edit</button><button class="delete-facility-building" onclick="deleteRow(this)">delete</button></td>
-                </tr>
+                </tr> -->
             </table>
             <button id="add-facilities-building" onclick="displayAddFacilityBuilding()">
                   add facility
@@ -94,9 +94,9 @@
                     <th>operation</th>
                 </tr>
                 <tr>
-                    <td id="plan-name">Renovating the caffee</td>
+                    <!-- <td id="plan-name">Renovating the caffee</td>
                     <td id="plan-loc">1st floor</td>
-                    <td><button>edit</button><button class="delete-building-plan" onclick="deleteRow(this)">delete</button></td>
+                    <td><button>edit</button><button class="delete-building-plan" onclick="deleteRow(this)">delete</button></td> -->
                 </tr>  
             </table>
             <button id="add-plan" onclick="displayAddPlan()">

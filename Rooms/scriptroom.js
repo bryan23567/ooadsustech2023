@@ -1,3 +1,102 @@
+
+// Link to the Backend API
+// ------------------------------------------------------------------------------------------------------
+
+
+
+const apiUrl = 'http://10.27.175.123:2334/api/building/6cf4a19e-d547-4e00-b2b2-cb44e1cd3123';
+
+// Define the headers for the request
+const headers = new Headers({
+    'Content-Type': 'application/json',
+});
+
+// Create the request object
+const request = new Request(apiUrl, {
+    method: 'GET',
+    headers: headers,
+});
+
+// Make the API request using the Fetch API
+fetch(request)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parse the response JSON
+    })
+    .then(data => {
+        // Print the response body
+        console.log('Response Body:', data);
+    
+        // Display building information on the page
+        displayBuildingInfo(data);
+        //displayBuildingLocation(data.location);
+        //displayFacilityBuildingTable(data.facility);
+        //displayplanBuildingTable(data.plan);
+        //displayBuildingPicture(data.picture);
+        
+        // Print the status code
+        console.log('Status Code:', data.status);
+    })    
+    .catch(error => {
+        // Handle errors here
+        console.error('There was a problem with the fetch operation:', error);
+    });
+
+
+
+
+function displayBuildingInfo(buildingInfo) {
+    const buildingInfoDiv = document.getElementById('details-right');
+    buildingInfoDiv.innerHTML = `
+        <h2>Location</h2>
+        <p>${buildingInfo.location}</p>
+        <h2>Facilities</h2>
+        <table class="table-building">
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Operation</th>
+            </tr>
+            ${generateFacilitiesHTML(buildingInfo.facilities)}
+        </table>
+        <button id="add-facilities-building" onclick="displayAddFacilityBuilding()">
+            Add Facility
+        </button>
+        <form id="facility-building-form" style="display: none;" onsubmit="return addFacilityFloor()">
+            <label for="facility-name-building">Name:</label>
+            <input type="text" id="facility-name-building" name="facility-name-building" required>
+            <br>
+            <label for="facility-amount-building">Amount:</label>
+            <input type="number" id="facility-amount-building" name="facility-amount-building" required>
+            <br>
+            <button type="submit">Add</button>
+        </form>
+        <!-- Add other building information here -->
+    `;
+}
+
+
+// Function to generate HTML for facilities based on data received from the backend
+function generateFacilitiesHTML(facilities) {
+    return facilities.map(facility => `
+        <tr>
+            <td>${facility.name}</td>
+            <td>${facility.location}</td>
+            <td class="operate-building">
+                <button>edit</button>
+                <button class="delete-facility-building" onclick="deleteRow(this)">delete</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+
+
+
 function addFacilityBuilding(){
     console.log("Add Facility Floor!")
     var name = document.getElementById("facility-name-floor").value;
@@ -154,9 +253,7 @@ function getRoomInfo(roomId) {
         }).join('');
 
         return `
-            <tr>
-                
-            </tr>
+            <tr></tr>
             ${occupantsHtml}
         `;
     } else {
@@ -175,6 +272,8 @@ function deleteRow(button){
         row.remove();
     }
 }
+
+
 
 
   

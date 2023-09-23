@@ -98,18 +98,19 @@ header nav a:focus {
 
 }
 
-.left img{
+.details-left img{
     display: block;
     height: 200px;
     width: 250px;
     margin: 10px 70px 10px 70px;
     border: silver solid;
 }
-.left{
+.left, .details-left{
     float: left;
     background-color: rgb(0, 128, 128);
     margin-left: 10px;
 }
+
 .right{
     float: right;
 }
