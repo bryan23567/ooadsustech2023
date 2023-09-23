@@ -1,7 +1,8 @@
 // Link to the Backend API
 // ------------------------------------------------------------------------------------------------------
 
-const apiUrl = 'http://10.27.175.123:2334/api/building/6cf4a19e-d547-4e00-b2b2-cb44e1cd3123';
+import { api_domain } from "../global.js";
+const apiUrl = api_domain + 'api/building/6cf4a19e-d547-4e00-b2b2-cb44e1cd3123';
 
 // Define the headers for the request
 const headers = new Headers({
@@ -39,6 +40,7 @@ fetch(request)
     })
     .catch(error => {
     // Handle errors here
+        alert("Please Contact Anthony Bryan for further support!");
         console.error('There was a problem with the fetch operation:', error);
     });
 
