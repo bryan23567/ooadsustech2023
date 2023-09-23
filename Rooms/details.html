@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Building 1 Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    <link rel="stylesheet" href = "css/styleroom.css">
+    <link rel="stylesheet" href="css/styleroom.css">
     <script src="detail_script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
     <header>
 
@@ -29,14 +32,18 @@
 
     <main>
         <aside class="details-left">
-            <img id="image1"  alt="yidan-lib">
-            <img id="image2"  alt="our-photos">
-            <img id="image3"  alt="bridge">
+            <button onclick="editPic()">edit picture</button>
+
+            <img id="image1" alt="yidan-lib">
+            <img id="image2" alt="our-photos">
+            <img id="image3" alt="bridge">
         </aside>
+
         <aside class="details-right">
             <h2>Location</h2>
             <p class="building-loc"><br>
-                <button class="edit-desc-button" onclick="displayDescription()">edit</button></p>
+                <button class="edit-desc-button" onclick="displayDescription()">edit</button>
+            </p>
             <form id="edit-desc" style="display: none;" onsubmit="addDescription()">
                 <label for="bulding-about">add description:<br></label>
                 <input type="text" id="building-about" name="building-about" required>
@@ -75,7 +82,7 @@
                 </tr> -->
             </table>
             <button id="add-facilities-building" onclick="displayAddFacilityBuilding()">
-                  add facility
+                add facility
             </button>
             <form id="facility-building-form" style="display: none;" onsubmit="return addFacilityFloor()">
                 <label for="facility-name-building">Name:</label>
@@ -97,7 +104,7 @@
                     <!-- <td id="plan-name">Renovating the caffee</td>
                     <td id="plan-loc">1st floor</td>
                     <td><button>edit</button><button class="delete-building-plan" onclick="deleteRow(this)">delete</button></td> -->
-                </tr>  
+                </tr>
             </table>
             <button id="add-plan" onclick="displayAddPlan()">
                 add plan
@@ -111,7 +118,7 @@
                 <br>
                 <button type="submit">add</button>
             </form>
-            
+
         </aside>
     </main>
     <footer>
@@ -120,10 +127,11 @@
         </div>
         <div class="foot-down">
             <p style="color: darkgrey;">
-                © 2023 All Rights Reserved. 
+                © 2023 All Rights Reserved.
             </p>
         </div>
     </footer>
 
 </body>
+
 </html>
