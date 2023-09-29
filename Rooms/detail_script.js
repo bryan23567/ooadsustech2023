@@ -207,7 +207,6 @@ function editPic() {
         <form id="imageUploadForm" enctype="multipart/form-data">
             <label for="imageInput">Select up to 3 images:</label>
             <input type="file" id="imageInput" name="image" accept="image/*" multiple>
-            <button type="submit">Upload</button>
         </form>
         <div id="selectedFiles"></div>
         `,
