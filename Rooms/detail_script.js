@@ -194,7 +194,6 @@ function editPic() {
         <form id="imageUploadForm" enctype="multipart/form-data">
             <label for="imageInput">Select up to 3 images:</label>
             <input type="file" id="imageInput" name="image" accept="image/*" multiple>
-            <button type="submit">Upload</button>
         </form>
         <div id="selectedFiles"></div>
         `,
@@ -281,7 +280,6 @@ function displayAddFacilityBuilding() {
                 <label for="facility-amount-building">Amount:</label>
                 <input type="number" id="facility-amount-building" name="facility-amount-building" required>
                 <br>
-                <button type="submit">add</button>
             </form>
             `,
         showCloseButton: true,
@@ -306,7 +304,6 @@ function displayAddPlan(){
                 <label for="loc-plan">Location:</label>
                 <input type="text" id="loc-plan" name="loc-plan" required>
                 <br>
-                <button type="submit">add</button>
             </form>
             `,
         showCloseButton: true,
