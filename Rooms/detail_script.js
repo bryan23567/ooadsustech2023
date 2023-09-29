@@ -65,6 +65,7 @@ function hideLoadingScreen() {
     loadingScreen.style.display = 'none';
 }
 
+
 function displayBuildingName(name) {
     var building_name = document.getElementById("building-name");
     building_name.innerHTML = name;
@@ -184,8 +185,20 @@ const uploadImages = async () => {
     }
 };
 
+// Function to check the image type
+function getImageType(images) {
+    for (const image of images) {
+        const acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+        if (!acceptedTypes.includes(image.type)) {
+            return 'Unknown';
+        }
+    }
+    return 'Valid';
+}
+
+
 function editPic() {
-    console.log('gffdfdfdpop')
+    console.log('Edit Pic');
     Swal.fire({
         title: '<strong>Upload Pictures</strong>',
      
@@ -194,6 +207,7 @@ function editPic() {
         <form id="imageUploadForm" enctype="multipart/form-data">
             <label for="imageInput">Select up to 3 images:</label>
             <input type="file" id="imageInput" name="image" accept="image/*" multiple>
+            <button type="submit">Upload</button>
         </form>
         <div id="selectedFiles"></div>
         `,
@@ -203,10 +217,15 @@ function editPic() {
         showConfirmButton: true,
         preConfirm: () => {
             const selectedImages = document.getElementById('imageInput').files;
-            
+            console.log(selectedImages);
+            const imageType = getImageType(selectedImages);
             if (selectedImages.length > 3) {
                 Swal.showValidationMessage(`Please select a maximum of 3 images.`);
-            } else {
+            }
+            else if(imageType == 'Unknown'){
+                Swal.showValidationMessage('Please select images in .jpg, .jpeg, .png');
+            } 
+            else {
                 const selectedFilesDiv = document.getElementById('selectedFiles');
                 selectedFilesDiv.innerHTML = ''; // Clear previous file names
                 
@@ -231,6 +250,17 @@ function editPic() {
                 //     // Handle the server response here
                 //     console.log(response);
                 // })
+
+                // Update the <img> elements on the left side with the selected images
+                const images = Array.from(selectedImages);
+                const leftSideImages = document.querySelectorAll('.details-left img');
+                
+                // Loop through and update the src attributes of the <img> elements
+                for (let i = 0; i < Math.min(images.length, leftSideImages.length); i++) {
+                    console.log('Updating Image', i);
+                    leftSideImages[i].src = URL.createObjectURL(images[i]);
+                    leftSideImages[i].style.display = 'block';
+                }
             }
         }
     }).then((result) => {
@@ -243,6 +273,9 @@ function editPic() {
         }
     });
 }
+
+document.getElementById('editPicBtn').addEventListener('click', editPic);
+
 
 // function displayAddFacilityBuilding() {
 //     var showButton = document.getElementById("add-facilities-building");
@@ -280,6 +313,7 @@ function displayAddFacilityBuilding() {
                 <label for="facility-amount-building">Amount:</label>
                 <input type="number" id="facility-amount-building" name="facility-amount-building" required>
                 <br>
+                <button type="submit">add</button>
             </form>
             `,
         showCloseButton: true,
@@ -304,6 +338,7 @@ function displayAddPlan(){
                 <label for="loc-plan">Location:</label>
                 <input type="text" id="loc-plan" name="loc-plan" required>
                 <br>
+                <button type="submit">add</button>
             </form>
             `,
         showCloseButton: true,
@@ -314,9 +349,6 @@ function displayAddPlan(){
      
     })
 }
-
-
-document.getElementById('editPicBtn').addEventListener('click', editPic);
 
 
 document.getElementById('addPlan').addEventListener('click', displayAddPlan)

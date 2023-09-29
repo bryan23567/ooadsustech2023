@@ -118,6 +118,13 @@ header nav a:focus {
     float: right;
     margin-right: 200px;
 }
+
+/* CSS for displaying images */
+.details-left img {
+    max-width: 100%; /* Ensure images fit within their containers */
+    display: none; /* Hide images by default */
+}
+
 table.table-building,
 .details-right table.plans-table{
     width: 600px;
