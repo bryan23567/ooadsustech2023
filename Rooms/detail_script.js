@@ -13,13 +13,13 @@ const headers = new Headers({
 });
 
 // Create the request object
-const request = new Request(apiUrl, {
+const getRequest = new Request(apiUrl, {
     method: 'GET',
     headers: headers,
 });
 
 // Make the API request using the Fetch API
-fetch(request)
+fetch(getRequest)
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -197,17 +197,32 @@ function getImageType(images) {
 }
 
 
+function imageToUint8Array(imageFile, callback) {
+    const reader = new FileReader();
+
+    reader.onload = function () {
+        const arrayBuffer = new Uint8Array(reader.result);
+        callback(arrayBuffer);
+    };
+
+    reader.readAsArrayBuffer(imageFile);
+}
+
 function editPic() {
     console.log('Edit Pic');
     Swal.fire({
         title: '<strong>Upload Pictures</strong>',
-     
         html:
         `
         <form id="imageUploadForm" enctype="multipart/form-data">
-            <label for="imageInput">Select up to 3 images:</label>
-            <input type="file" id="imageInput" name="image" accept="image/*" multiple>
-            <button type="submit">Upload</button>
+            <label for="imageInput1">Select Picture 1:</label>
+            <input type="file" id="imageInput1" name="image1" accept="image/*">
+            
+            <label for="imageInput2">Select Picture 2:</label>
+            <input type="file" id="imageInput2" name="image2" accept="image/*">
+            
+            <label for="imageInput3">Select Picture 3:</label>
+            <input type="file" id="imageInput3" name="image3" accept="image/*">
         </form>
         <div id="selectedFiles"></div>
         `,
@@ -216,52 +231,75 @@ function editPic() {
         focusConfirm: false,
         showConfirmButton: true,
         preConfirm: () => {
-            const selectedImages = document.getElementById('imageInput').files;
-            console.log(selectedImages);
-            const imageType = getImageType(selectedImages);
-            if (selectedImages.length > 3) {
-                Swal.showValidationMessage(`Please select a maximum of 3 images.`);
-            }
-            else if(imageType == 'Unknown'){
-                Swal.showValidationMessage('Please select images in .jpg, .jpeg, .png');
-            } 
-            else {
-                const selectedFilesDiv = document.getElementById('selectedFiles');
-                selectedFilesDiv.innerHTML = ''; // Clear previous file names
-                
-                // Display selected file names
-                for (const file of selectedImages) {
-                    selectedFilesDiv.innerHTML += `<p>${file.name}</p>`;
-                }
-    
-                // Handle the selected images here
-                // For example, you can use FormData to send them to the server
-                const formData = new FormData();
-                for (const file of selectedImages) {
-                    formData.append('images', file);
-                }
-                
-                // You can use fetch or another method to send the formData to the server
-                // fetch('your-upload-endpoint', {
-                //     method: 'POST',
-                //     body: formData
-                // })
-                // .then(response => {
-                //     // Handle the server response here
-                //     console.log(response);
-                // })
+            const selectedImages1 = document.getElementById('imageInput1').files;
+            const selectedImages2 = document.getElementById('imageInput2').files;
+            const selectedImages3 = document.getElementById('imageInput3').files;
 
-                // Update the <img> elements on the left side with the selected images
-                const images = Array.from(selectedImages);
-                const leftSideImages = document.querySelectorAll('.details-left img');
-                
-                // Loop through and update the src attributes of the <img> elements
-                for (let i = 0; i < Math.min(images.length, leftSideImages.length); i++) {
-                    console.log('Updating Image', i);
-                    leftSideImages[i].src = URL.createObjectURL(images[i]);
-                    leftSideImages[i].style.display = 'block';
-                }
+            // Function to convert Uint8Array to Array
+            function uint8ArrayToArray(uint8Array) {
+                return Array.from(uint8Array);
             }
+
+            // Create a function that returns a Promise for Uint8Array conversion
+            function convertToUint8Array(imageFile) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = function () {
+                        const arrayBuffer = new Uint8Array(reader.result);
+                        resolve(arrayBuffer);
+                    };
+                    reader.onerror = function (error) {
+                        reject(error);
+                    };
+                    reader.readAsArrayBuffer(imageFile);
+                });
+            }
+
+            // Use Promise.all to convert all selected images to Uint8Array
+            return Promise.all([
+                convertToUint8Array(selectedImages1[0]),
+                convertToUint8Array(selectedImages2[0]),
+                convertToUint8Array(selectedImages3[0]),
+            ])
+            .then((result) => {
+                const [uint8Array1, uint8Array2, uint8Array3] = result;
+
+                console.log("uint8Array1", uint8Array1);
+                console.log("uint8Array2",uint8Array2);
+                console.log("uint8Array3",uint8Array3);
+
+                // Create a JSON object containing your data
+                const jsonData = {
+                    pictureID: null,
+                    picture1: uint8Array1,
+                    picture2: uint8Array2,
+                    picture3: uint8Array3,
+                };
+
+                // Convert JSON object to a JSON string
+                const jsonString = JSON.stringify(jsonData);
+
+                console.log("jsonString:", jsonString);
+
+                // Make a POST request to send the JSON string to the backend
+                return fetch(uri_api + '/api/uploadBuildingImages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: jsonString,
+                });
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the response JSON if needed
+            })
+            .catch((error) => {
+                // Handle errors here
+                console.error('There was a problem with the fetch operation:', error);
+            });
         }
     }).then((result) => {
         if (result.isConfirmed) {
@@ -270,36 +308,20 @@ function editPic() {
                 'Your images have been uploaded.',
                 'success'
             );
+        } else if (result.isDismissed) {
+            Swal.fire(
+                'Cancelled',
+                'You cancelled the upload.',
+                'info'
+            );
         }
     });
 }
 
+// Add an event listener to the button that triggers the editPic function
 document.getElementById('editPicBtn').addEventListener('click', editPic);
 
 
-// function displayAddFacilityBuilding() {
-//     var showButton = document.getElementById("add-facilities-building");
-//     var addFacilityBuildingForm = document.getElementById("facility-building-form");
-
-//     if (addFacilityBuildingForm.style.display === "none" || addFacilityBuildingForm.style.display === "") {
-//         addFacilityBuildingForm.style.display = "block";
-//     } else {
-//         addFacilityBuildingForm.style.display = "none";
-//     }
-// }
-
-// function displayAddPlan(){
-//     var showButton = document.getElementById("add-plan");
-//     var addPlanForm = document.getElementById("plan-building-form");
-
-//     if(addPlanForm.style.display == "none" || addPlanForm.style.display == ""){
-//         addPlanForm.style.display = "block";
-//     }
-//     else{
-//         addPlanForm.style.display = "none";
-//     }
-
-// }
 
 function displayAddFacilityBuilding() {
     Swal.fire({
