@@ -14,6 +14,12 @@
 </head>
 
 <body>
+
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <p>Loading...</p>
+    </div>
+    
     <header>
 
         <div class="college-logo">
@@ -85,7 +91,7 @@
                     <td class="operate-building"><button>edit</button><button class="delete-facility-building" onclick="deleteRow(this)">delete</button></td>
                 </tr> -->
             </table>
-            <button id="add-facilities-building" onclick="displayAddFacilityBuilding()">
+            <button id="add-facilities-building">
                 add facility
             </button>
             <form id="facility-building-form" style="display: none;" onsubmit="return addFacilityFloor()">
@@ -110,18 +116,10 @@
                     <td><button>edit</button><button class="delete-building-plan" onclick="deleteRow(this)">delete</button></td> -->
                 </tr>
             </table>
-            <button id="add-plan" onclick="displayAddPlan()">
+            <button id="addPlan">
                 add plan
             </button>
-            <form id="plan-building-form" style="display: none;" onsubmit="return addPlan()">
-                <label for="plan-name-building">Plan:</label>
-                <input type="text" id="plan-name-building" name="plan-name-building" required>
-                <br>
-                <label for="loc-plan">Location:</label>
-                <input type="text" id="loc-plan" name="loc-plan" required>
-                <br>
-                <button type="submit">add</button>
-            </form>
+            
 
         </aside>
     </main>

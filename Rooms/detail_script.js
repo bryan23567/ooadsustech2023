@@ -5,6 +5,7 @@ import { uri_api } from "../global.js";
 console.log('hellos')
 const apiUrl = uri_api + '/api/building/6cf4a19e-d547-4e00-b2b2-cb44e1cd3123';
 
+showLoadingScreen();
 
 // Define the headers for the request
 const headers = new Headers({
@@ -27,6 +28,8 @@ fetch(request)
     })
     .then(data => {
         // Print the response body
+        hideLoadingScreen();
+
         console.log('Response Body:', data);
 
         // Display building information on the page
@@ -41,11 +44,26 @@ fetch(request)
         console.log('Status Code:', data.status);
     })
     .catch(error => {
+
+        hideLoadingScreen();
     // Handle errors here
+
         alert("Please Contact Anthony Bryan for further support!");
         console.error('There was a problem with the fetch operation:', error);
     });
 
+
+// Function to show the loading screen
+function showLoadingScreen() {
+    const loadingScreen = document.getElementById('loading-screen');
+    loadingScreen.style.display = 'block';
+}
+
+// Function to hide the loading screen
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loading-screen');
+    loadingScreen.style.display = 'none';
+}
 
 function displayBuildingName(name) {
     var building_name = document.getElementById("building-name");
@@ -167,9 +185,9 @@ const uploadImages = async () => {
 };
 
 function editPic() {
-    console.log('pop')
+    console.log('gffdfdfdpop')
     Swal.fire({
-        title: '<strong>uoload picture</strong>',
+        title: '<strong>Upload Picture</strong>',
      
         html:
             `
@@ -188,10 +206,87 @@ function editPic() {
     })
 }
 
+// function displayAddFacilityBuilding() {
+//     var showButton = document.getElementById("add-facilities-building");
+//     var addFacilityBuildingForm = document.getElementById("facility-building-form");
+
+//     if (addFacilityBuildingForm.style.display === "none" || addFacilityBuildingForm.style.display === "") {
+//         addFacilityBuildingForm.style.display = "block";
+//     } else {
+//         addFacilityBuildingForm.style.display = "none";
+//     }
+// }
+
+// function displayAddPlan(){
+//     var showButton = document.getElementById("add-plan");
+//     var addPlanForm = document.getElementById("plan-building-form");
+
+//     if(addPlanForm.style.display == "none" || addPlanForm.style.display == ""){
+//         addPlanForm.style.display = "block";
+//     }
+//     else{
+//         addPlanForm.style.display = "none";
+//     }
+
+// }
+
+function displayAddFacilityBuilding() {
+    Swal.fire({
+     
+        html:
+            `
+            <form id="facility-building-form"  enctype="multipart/form-data">
+                <label for="facility-name-building">Name:</label>
+                <input type="text" id="facility-name-building" name="facility-name-building" required>
+                <br>
+                <label for="facility-amount-building">Amount:</label>
+                <input type="number" id="facility-amount-building" name="facility-amount-building" required>
+                <br>
+                <button type="submit">add</button>
+            </form>
+            `,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        showConfirmButton:true
+     
+     
+    })
+}
+
+function displayAddPlan(){
+
+    Swal.fire({
+     
+        html:
+            `
+            <form id="plan-building-form" enctype="multipart/form-data">
+                <label for="plan-name-building">Plan:</label>
+                <input type="text" id="plan-name-building" name="plan-name-building" required>
+                <br>
+                <label for="loc-plan">Location:</label>
+                <input type="text" id="loc-plan" name="loc-plan" required>
+                <br>
+                <button type="submit">add</button>
+            </form>
+            `,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        showConfirmButton:true
+     
+     
+    })
+}
+
+
 document.getElementById('editPicBtn').addEventListener('click', editPic);
 
 
-document.getElementById('uploadButton').addEventListener('click', uploadImages);
+document.getElementById('addPlan').addEventListener('click', displayAddPlan)
 
+document.getElementById('add-facilities-building').addEventListener('click', displayAddFacilityBuilding)
+
+// document.getElementById('addPplan').addEventListener('click', displayAddPlan)
 
 
