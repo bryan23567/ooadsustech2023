@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dashb.css">
+    <title>School Dashboard</title>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="chat-icon" onclick="openChat()">📬</div>
+        <div class="profile-icon" onclick="openProfile()">👤<!--<a href="profile.html">Profile</a>--></div>
+        
+        <!-- School Map https://sustech.online/facility/#%E5%8D%97%E7%A7%91%E5%88%B6%E9%9C%B8-%E6%A0%87%E8%AE%B0%E5%8E%BB%E8%BF%87%E7%9A%84%E6%A0%A1%E5%9B%AD%E5%9C%B0%E7%82%B9-->
+        <div class="logo-grid">
+            <a href="zhiren.html" class="logo-button">
+                <img src="library/college/zhiren-removebg-preview.png" alt="Logo">
+            </a>
+            <a href="zhicheng.html" class="logo-button">
+                <img src="library/college/zhiceng-removebg-preview.png" alt="Logo">
+            </a>
+            <a href="shuren.html" class="logo-button">
+                <img src="library/college/shuren-removebg-preview.png" alt="Logo">
+            </a>
+            <a href="shude.html" class="logo-button">
+                <img src="library/college/shude-removebg-preview.png" alt="Logo">
+            </a>
+            <a href="zhixin.html" class="logo-button">
+                <img src="library/college/zhixin-removebg-preview.png" alt="Logo">
+            </a>
+            <a href="shuli.html" class="logo-button">
+                <img src="library/college/shuli-removebg-preview.png" alt="Logo">
+            </a>
+        </div>
+        <label class="toggle-switch">
+            <input type="checkbox" id="enlarge-toggle" />
+            <span class="slider"></span>
+            <span class="toggle-label">Enlarge</span>
+        </label>
+    </div>
+    <div id="chat-toolbox" style="display: none;">
+        <!-- Chat components go here -->
+    </div>
+
+    <div id="profile-page" style="display: none;">
+        <!-- Profile/user info components go here -->
+    </div>
+    
+    <script src="dashb.js"></script>
+</body>
+</html>
