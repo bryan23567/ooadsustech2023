@@ -169,23 +169,61 @@ const uploadImages = async () => {
 function editPic() {
     console.log('pop')
     Swal.fire({
-        title: '<strong>uoload picture</strong>',
-     
+        title: '<strong>Upload Pictures</strong>',
         html:
-            `
-            <form id="imageUploadForm" enctype="multipart/form-data">
+        `
+        <form id="imageUploadForm" enctype="multipart/form-data">
             <label for="imageInput">Select up to 3 images:</label>
             <input type="file" id="imageInput" name="image" accept="image/*" multiple>
             <button type="submit">Upload</button>
         </form>
-            `,
+        <div id="selectedFiles"></div>
+        `,
         showCloseButton: true,
         showCancelButton: true,
         focusConfirm: false,
-        showConfirmButton:true
-     
-     
-    })
+        showConfirmButton: true,
+        preConfirm: () => {
+            const selectedImages = document.getElementById('imageInput').files;
+            
+            if (selectedImages.length > 3) {
+                Swal.showValidationMessage(`Please select a maximum of 3 images.`);
+            } else {
+                const selectedFilesDiv = document.getElementById('selectedFiles');
+                selectedFilesDiv.innerHTML = ''; // Clear previous file names
+                
+                // Display selected file names
+                for (const file of selectedImages) {
+                    selectedFilesDiv.innerHTML += `<p>${file.name}</p>`;
+                }
+    
+                // Handle the selected images here
+                // For example, you can use FormData to send them to the server
+                const formData = new FormData();
+                for (const file of selectedImages) {
+                    formData.append('images', file);
+                }
+                
+                // You can use fetch or another method to send the formData to the server
+                // fetch('your-upload-endpoint', {
+                //     method: 'POST',
+                //     body: formData
+                // })
+                // .then(response => {
+                //     // Handle the server response here
+                //     console.log(response);
+                // })
+            }
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire(
+                'Uploaded!',
+                'Your images have been uploaded.',
+                'success'
+            );
+        }
+    });
 }
 
 document.getElementById('editPicBtn').addEventListener('click', editPic);
