@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Building 1 Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href = "css/styleroom.css">
+    <!-- <script src="../global.js" type="module" ></script> -->
+    <script src="detail_script.js" type="module" defer></script>
+    <!-- <script src="/global.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+
+<body>
+
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <p>Loading...</p>
+    </div>
+
+    <header>
+
+        <div class="college-logo">
+            <img src="../pics/zhiren_bgremoved.png">
+        </div>
+        <div class="header-right">
+            <ul>
+                <li class="profil">Profile</li>
+                <li class="logout">Logout</li>
+            </ul>
+        </div>
+        <nav>
+            <h1 id="building-name"></h1>
+            <a href="details.html" class="active"><b>Details</b></a>
+            <a href="map.html"><b>Map</b></a>
+        </nav>
+
+    </header>
+
+    <main>
+        <aside class="details-left">
+            <button id="editPicBtn">edit picture</button>
+            <!-- <button onclick>edit picture</button> -->
+
+            <input type="file" id="imageInput" name="image" accept=".jpg, .jpeg, .png" multiple style="display: none;">
+
+            <label for="imageInput" style="cursor: pointer;"></label>
+
+            <img id="image1" alt="yidan-lib">
+            <img id="image2" alt="our-photos">
+            <img id="image3" alt="bridge">
+        </aside>
+
+        <aside class="details-right">
+            <h2>Location</h2>
+            <p class="building-loc"><br>
+                <button class="edit-desc-button" onclick="displayDescription()">edit</button>
+            </p>
+            <form id="edit-desc" style="display: none;" onsubmit="addDescription()">
+                <label for="bulding-about">add description:<br></label>
+                <input type="text" id="building-about" name="building-about" required>
+                <br>
+                <button>submit</button>
+            </form>
+            <h2>Facilities</h2>
+            <table class="table-building">
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>operation</th>
+                </tr>
+                <!-- <tr>
+                    <td id="name-building-facility-id">Activity Room</td>
+                    <td id="loc-building-facility-id">1st floor</td>
+                    <td class="operate-building"><button>edit</button><button class="delete-facility-building" onclick="deleteRow(this)">delete</button></td>
+                </tr>
+                    <td id="name-building-facility-id">Caffee</td>
+                    <td id="loc-building-facility-id">1st floor</td>
+                    <td class="operate-building"><button>edit</button><button class="delete-facility-building" onclick="deleteRow(this)">delete</button></td>
+                <tr>
+                    <td id="name-building-facility-id">Park Area</td>
+                    <td id="loc-building-facility-id">1st floor</td>
+                    <td class="operate-building"><button>edit</button><button class="delete-facility-building" onclick="deleteRow(this)">delete</button></td>
+                </tr>
+                <tr>
+                    <td id="name-building-facility-id">Laundry Room</td>
+                    <td id="loc-building-facility-id">1st floor</td>
+                    <td class="operate-building"><button>edit</button><button class="delete-facility-building" onclick="deleteRow(this)">delete</button></td>
+                </tr>
+                <tr>
+                    <td id="name-building-facility-id">Music Room</td>
+                    <td id="loc-building-facility-id">1st floor</td>
+                    <td class="operate-building"><button>edit</button><button class="delete-facility-building" onclick="deleteRow(this)">delete</button></td>
+                </tr> -->
+            </table>
+            <button id="add-facilities-building">
+                add facility
+            </button>
+            <form id="facility-building-form" style="display: none;" onsubmit="return addFacilityFloor()">
+                <label for="facility-name-building">Name:</label>
+                <input type="text" id="facility-name-building" name="facility-name-building" required>
+                <br>
+                <label for="facility-amount-building">Amount:</label>
+                <input type="number" id="facility-amount-building" name="facility-amount-building" required>
+                <br>
+                <button type="submit">add</button>
+            </form>
+            <h2>Plans</h2>
+            <table class="plans-table">
+                <tr>
+                    <th>Plan</th>
+                    <th>Location</th>
+                    <th>operation</th>
+                </tr>
+                <tr>
+                    <!-- <td id="plan-name">Renovating the caffee</td>
+                    <td id="plan-loc">1st floor</td>
+                    <td><button>edit</button><button class="delete-building-plan" onclick="deleteRow(this)">delete</button></td> -->
+                </tr>
+            </table>
+            <button id="addPlan">
+                add plan
+            </button>
+            
+
+        </aside>
+    </main>
+    <footer>
+        <div class="foot-up">
+            <img src="../pics/sustech_bgremoved.png">
+        </div>
+        <div class="foot-down">
+            <p style="color: darkgrey;">
+                © 2023 All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+</body>
+
+
+</html>
