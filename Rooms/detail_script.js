@@ -43,9 +43,9 @@ fetch(getRequest)
         displayFacilityBuildingTable(data.facilities);
         displayPlanBuildingTable(data.plan);
 
-        
-        displayBuildingPicture(data.picture);
-       
+        if(data.picture != null){
+            displayBuildingPicture(data.picture);
+        }
 
 
         // Print the status code
@@ -65,10 +65,6 @@ fetch(getRequest)
 function showLoadingScreen() {
     const loadingScreen = document.getElementById('loading-screen');
     loadingScreen.style.display = 'block';
-}
-
-function reloadWebsite() {
-    location.reload();
 }
 
 // Function to hide the loading screen
@@ -136,6 +132,175 @@ function displayPlanBuildingTable(plans) {
     });
 }
 // var img_upload;
+// function displayBuildingPicture(pictures) {
+//     // const encoder = new TextEncoder();
+//     // Your byte array (Uint8Array)
+//     const byteArray = new Uint8Array(pictures.picture2.data);
+
+//     // Convert the byte array to a binary string
+//     let binaryString = '';
+//     byteArray.forEach(byte => {
+//         binaryString += String.fromCharCode(byte);
+//     });
+
+//     // Use btoa() to convert the binary string to Base64
+
+//     function base64ToFile(base64Data, fileName) {
+//         // Decode the base64 string into binary data
+//         const binaryData = atob(base64Data);
+//         const arrayBuffer = new ArrayBuffer(binaryData.length);
+//         const uint8Array = new Uint8Array(arrayBuffer);
+//         for (let i = 0; i < binaryData.length; i++) {
+//             uint8Array[i] = binaryData.charCodeAt(i);
+//         }
+
+//         // Create a Blob from the binary data
+//         const blob = new Blob([uint8Array]);
+
+//         // Create a URL for the Blob
+//         const blobUrl = URL.createObjectURL(blob);
+//         console.log(blobUrl);
+//         // Create an <a> element with the URL and file name
+//         const link = document.createElement("a");
+//         link.href = blobUrl;
+//         link.download = fileName;
+
+//         // // Trigger a click event on the <a> element to download the file
+//         link.click();
+
+//         // Clean up: Revoke the Blob URL
+//         URL.revokeObjectURL(blobUrl);
+//     }
+
+//     // Example usage:
+//     const base64Data = btoa(binaryString);
+//     const fileName = "example.txt";
+//     base64ToFile(base64Data, fileName);
+    // document.getElementById('image1').src = "data:image/jpg;base64," + base64String;
+
+
+    // // Convert the object properties into an array of Uint8Arrays
+    // console.log(pictures.picture1.data);
+    // const pictureArray = [pictures.picture1];
+    // const imgElements = [document.getElementById('image1')]; // Replace with your <img> element IDs
+
+    // // Function to display an image in the specified <img> element
+    // function displayImageInElement(imageData, imgElement) {
+    //     const reader = new FileReader();
+
+    //     reader.onload = function () {
+    //         // reader.result contains the Base64 data URL
+    //         const base64Data = reader.result;
+    //         console.log(base64Data);
+    //         // Set the Base64 data URL as the src of the <img> element
+    //         imgElement.src = base64Data;
+    //         imgElement.style.display = 'block'; // Show the image
+
+    //         // Optionally, you can also save the Base64 data for later use
+    //         img_upload = base64Data;
+    //         // toggle_upload.value = true; // If needed
+
+    //         // The image is now displayed in the <img> element
+    //     };
+
+    //     // Assuming imageData is the Buffer (bytea) data from PostgreSQL
+    //     const bufferData = imageData.data;
+
+    //     // Convert the Buffer data to a Uint8Array
+    //     const uint8Array = new Uint8Array(bufferData);
+    //     console.log(uint8Array);
+    //     // Convert the Uint8Array to a Blob
+    //     const blob = new Blob([uint8Array], { type: 'image/jpg' }); // Adjust the type as needed
+
+    //     // Read the Blob as a data URL
+    //     reader.readAsDataURL(blob);
+    // }
+
+    // // Loop through the pictureArray and display them sequentially
+    // pictureArray.forEach((imageData, index) => {
+    //     const imgElement = imgElements[index];
+
+    //     if (imgElement && imageData) {
+    //         displayImageInElement(imageData, imgElement);
+    //     }
+    // });
+// }
+
+// function displayBuildingPicture(pictures) {
+//     // Get references to the img elements by their IDs
+//     var img1 = document.getElementById('image1');
+//     // var img2 = document.getElementById('image2');
+//     // var img3 = document.getElementById('image3');
+
+//     // Create a function to convert Uint8Array to data URL
+//     function onFileSelect(event) {
+//         const reader = new FileReader();
+//         const imgElement = document.getElementById('imgElement'); // Replace with your <img> element ID
+
+//         reader.onload = function () {
+//             // reader.result contains the Base64 data URL
+//             const base64Data = reader.result;
+
+//             // Set the Base64 data URL as the src of the <img> element
+//             imgElement.src = base64Data;
+
+//             // Optionally, you can also save the Base64 data for later use
+//             img_upload = base64Data;
+//             toggle_upload.value = true; // If needed
+
+//             // The image is now displayed in the <img> element
+//         };
+
+//         // Assuming event.target.files[0] is the Buffer (bytea) data from PostgreSQL
+//         const bufferData = event.target.files[0].data;
+
+//         // Convert the Buffer data to a Uint8Array
+//         const uint8Array = new Uint8Array(bufferData);
+
+//         // Convert the Uint8Array to a Blob
+//         const blob = new Blob([uint8Array], { type: 'image/jpeg' }); // Adjust the type as needed
+
+//         // Read the Blob as a data URL
+//         reader.readAsDataURL(blob);
+//     }
+
+//     // Convert the object properties into an array of Uint8Arrays
+//     // const pictureArray = [pictures.picture1, pictures.picture2, pictures.picture3];
+//     // Convert Uint8Array to Blob
+//     const imageData = pictures.picture1; // Replace with your actual data
+
+//     // Create a Blob from the Uint8Array data
+//     const blob = new Blob([imageData], { type: 'image/jpeg' }); // Adjust the type as needed
+
+//     // Create a File object from the Blob
+//     const file = new File([blob], 'image.jpg', { type: 'image/jpeg' }); // Adjust the filename and type
+
+//     // Create an event object with the File as the target
+//     const event = { target: { files: [file] } };
+
+//     // Call the onFileSelect function with the event
+//     onFileSelect(event);
+//     // Loop through the picture array and display them sequentially
+//     // Promise.all(pictureArray.map(uint8ArrayToDataURL)).then((dataURLs) => {
+//     //     console.log(dataURLs);
+//     //     if (dataURLs[0]) {
+//     //         img1.src = dataURLs[0]; // Set the source of the first image
+//     //         img1.style.display = 'block'; // Show the first image
+//     //     }
+
+//     //     if (dataURLs[1]) {
+//     //         img2.src = dataURLs[1]; // Set the source of the second image
+//     //         img2.style.display = 'block'; // Show the second image
+//     //     }
+
+//     //     if (dataURLs[2]) {
+//     //         img3.src = dataURLs[2]; // Set the source of the third image
+//     //         img3.style.display = 'block'; // Show the third image
+//     //     }
+//     // });
+// }
+
+
 function displayBuildingPicture(pictures) {
     const imageIds = ['image1', 'image2', 'image3']; // IDs of the <img> elements
     const imageContainer = document.querySelector('.details-left');
@@ -312,7 +477,6 @@ function editPic() {
                 'Your images have been uploaded.',
                 'success'
             );
-            reloadWebsite();
         } else if (result.isDismissed) {
             Swal.fire(
                 'Cancelled',
@@ -404,4 +568,5 @@ document.getElementById('addPlan').addEventListener('click', displayAddPlan)
 document.getElementById('add-facilities-building').addEventListener('click', displayAddFacilityBuilding)
 
 // document.getElementById('addPplan').addEventListener('click', displayAddPlan)
+
 
