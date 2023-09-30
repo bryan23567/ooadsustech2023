@@ -8,7 +8,8 @@ const apiUrl = uri_api + '/api/building/6cf4a19e-d547-4e00-b2b2-cb44e1cd3123';
 showLoadingScreen();
 var buildingId;
 var pictureId;
-
+var facilities;
+var plan;
 // Define the headers for the request
 const headers = new Headers({
     'Content-Type': 'application/json',
@@ -38,6 +39,8 @@ fetch(getRequest)
         //displayBuildingInfo(data);
         buildingId = data.buildingId;
         pictureId = data.pictureId;
+        facilities = data.facilities;
+        plan = data.plan;
         displayBuildingName(data.name);
         displayBuildingLocation(data.location);
         displayFacilityBuildingTable(data.facilities);
@@ -93,9 +96,9 @@ function displayBuildingLocation(location) {
 
 
 function displayFacilityBuildingTable(facilities) {
-    var tableBody = document.querySelector('.table-building tbody');
+    var tableBody = document.querySelector('.table-building');
 
-    facilities.forEach(function (facility) {
+    facilities.forEach(function (facility, index) {
         var newRow = document.createElement("tr");
 
         var facilityName = facility.name;
@@ -105,19 +108,74 @@ function displayFacilityBuildingTable(facilities) {
             <td>${facilityName}</td>
             <td>${facilityLoc}</td>
             <td>
-                <button class="delete" onclick="deleteRow(this)">Delete</button><br>
+            <button class="delete-building-facility" data-facility-id="${index}">Delete</button>
             </td>
         `;
-
         tableBody.appendChild(newRow);
     });
+
+    // Add click event listeners to the "Delete" buttons;
+    var deleteButtons = document.querySelectorAll('.delete-building-facility');
+    deleteButtons.forEach(function (button) {
+        button.addEventListener('click', deleteFacility); //???
+    });
 }
+
+
+// Function to handle the delete operation
+function deleteFacility(event) {
+    const facilityId = event.target.getAttribute('data-facility-id');
+    console.log(facilityId);
+
+    Swal.fire({
+        title: 'Delete Facility',
+        text: 'Are you sure you want to delete this facility?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Delete'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Make a DELETE request to your server to delete the facility by facilityId
+            fetch(uri_api + `/api/deleteBuildingFacilities`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    buildingFacilitiesId: facilities[facilityId].buildingFacilitiesId,
+                    buildingId: buildingId,
+                }),
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Optionally, parse the response JSON if needed
+            })
+            .then(function(data) {
+                // Handle the successful deletion on the client-side
+                event.target.closest('tr').remove(); // Remove the row from the table
+                console.log('Facility deleted:', data);
+                Swal.fire('Deleted!', 'The facility has been deleted.', 'success');
+                reloadWebsite();
+            })
+            .catch(function(error) {
+                // Handle errors here
+                console.error('There was a problem with the fetch operation:', error);
+                Swal.fire('Error', 'An error occurred while deleting the facility.', 'error');
+            });
+        }
+    });
+}
+
 
 
 function displayPlanBuildingTable(plans) {
     var tableBody = document.querySelector('.plans-table tbody');
 
-    plans.forEach(function (plan) {
+    plans.forEach(function (plan, index) {
         var newRow = document.createElement('tr');
 
         var planName = plan.plan;
@@ -127,13 +185,70 @@ function displayPlanBuildingTable(plans) {
             <td>${planName}</td>
             <td>${planLoc}</td>
             <td>
-                <button class="delete" onclick="deleteRow(this)">Delete</button><br>
+                <button class="delete-building-plan" data-plan-id="${index}">Delete</button><br>
             </td>
         `;
+        console.log(planName);
+        console.log(planLoc);
 
         tableBody.appendChild(newRow);
     });
+
+    var deleteButtons = document.querySelectorAll('.delete-building-plan');
+    deleteButtons.forEach(function (button) {
+        button.addEventListener('click', deletePlan);
+    });
 }
+
+function deletePlan(event) {
+    const planId = event.target.getAttribute('data-plan-id');
+    console.log(planId);
+
+    Swal.fire({
+        title: 'Delete Plan',
+        text: 'Are you sure you want to delete this plan?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Delete'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Make a DELETE request to your server to delete the plan by planId
+            fetch(uri_api + `/api/deleteBuildingPlans`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    planId: plan[planId].planId, // Use plans[planId] to access the plan object
+                    buildingId: buildingId,
+                }),
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Optionally, parse the response JSON if needed
+            })
+            .then(function(data) {
+                // Handle the successful deletion on the client-side
+                event.target.closest('tr').remove(); // Remove the row from the table
+                console.log('Plan deleted:', data);
+                Swal.fire('Deleted!', 'The plan has been deleted.', 'success');
+                reloadWebsite();
+            })
+            .catch(function(error) {
+                // Handle errors here
+                console.error('There was a problem with the fetch operation:', error);
+                Swal.fire('Error', 'An error occurred while deleting the plan.', 'error');
+            });
+        }
+    });
+}
+
+
+
 // var img_upload;
 function displayBuildingPicture(pictures) {
     const imageIds = ['image1', 'image2', 'image3']; // IDs of the <img> elements
@@ -350,57 +465,203 @@ function displayPictures(pictureUrls) {
 
 function displayAddFacilityBuilding() {
     Swal.fire({
-
-        html:
-            `
-            <form id="facility-building-form"  enctype="multipart/form-data">
+        title: 'Add Facility',
+        html: `
+            <form id="facility-building-form">
                 <label for="facility-name-building">Name:</label>
                 <input type="text" id="facility-name-building" name="facility-name-building" required>
                 <br>
-                <label for="facility-amount-building">Amount:</label>
-                <input type="number" id="facility-amount-building" name="facility-amount-building" required>
-                <br>
-                <button type="submit">add</button>
-            </form>
-            `,
+                <label for="facility-building-location">Location:</label>
+                <input type="text" id="facility-building-location" name="facility-building-location" required>
+            </form>`,
         showCloseButton: true,
         showCancelButton: true,
         focusConfirm: false,
-        showConfirmButton: true
+        showConfirmButton: true,
+        preConfirm: () => {
+            const nameInput = document.getElementById('facility-name-building').value;
+            const locFacilitytInput = document.getElementById('facility-building-location').value;
 
+            // You can perform input validation here if needed
 
-    })
+            // Create an object with the form data
+            const formData = {
+                buildingId: buildingId,
+                buildingFacilitiesId: null,
+                name: nameInput,
+                location: locFacilitytInput,
+            };
+
+            // Make a POST request to your server
+            return fetch(uri_api + '/api/editBuildingFacilities', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Parse the response JSON if needed
+                })
+                .then((data) => {
+                    // Handle the response from the server as needed
+                    console.log('Response:', data);
+
+                    // Optionally, you can perform additional actions after a successful POST request
+                    return data; // This will close the SweetAlert2 modal
+                })
+                .catch((error) => {
+                    // Handle errors here
+                    console.error('There was a problem with the fetch operation:', error);
+                    Swal.showValidationMessage('An error occurred. Please try again.');
+                });
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire('Success!', 'Facility added successfully.', 'success');
+            reloadWebsite();
+        }
+    });
 }
 
+// Add an event listener to the button to trigger the SweetAlert2 modal
+document.getElementById('add-facilities-building').addEventListener('click', displayAddFacilityBuilding);
+
+
+
+
+
 function displayAddPlan() {
-
     Swal.fire({
-
-        html:
-            `
-            <form id="plan-building-form" enctype="multipart/form-data">
+        title: 'Add Plan',
+        html: `
+            <form id="plan-building-form">
                 <label for="plan-name-building">Plan:</label>
                 <input type="text" id="plan-name-building" name="plan-name-building" required>
                 <br>
                 <label for="loc-plan">Location:</label>
                 <input type="text" id="loc-plan" name="loc-plan" required>
-                <br>
-                <button type="submit">add</button>
-            </form>
-            `,
+            </form>`,
         showCloseButton: true,
         showCancelButton: true,
         focusConfirm: false,
-        showConfirmButton: true
+        showConfirmButton: true,
+        preConfirm: () => {
+            const planNameInput = document.getElementById('plan-name-building').value;
+            const locationInput = document.getElementById('loc-plan').value;
 
+            // You can perform input validation here if needed
 
-    })
+            // Create an object with the form data
+            const formData = {
+                buildingId: buildingId,
+                planId: null,
+                plan: planNameInput,
+                location: locationInput,
+            };
+
+            // Make a POST request to your server
+            return fetch(uri_api + '/api/editBuildingPlans', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Parse the response JSON if needed
+                })
+                .then((data) => {
+                    // Handle the response from the server as needed
+                    console.log('Response:', data);
+
+                    // Optionally, you can perform additional actions after a successful POST request
+                    return data; // This will close the SweetAlert2 modal
+                })
+                .catch((error) => {
+                    // Handle errors here
+                    console.error('There was a problem with the fetch operation:', error);
+                    Swal.showValidationMessage('An error occurred. Please try again.');
+                });
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire('Success!', 'Plan added successfully.', 'success');
+            reloadWebsite();
+        }
+    });
 }
 
+// Add an event listener to the button to trigger the SweetAlert2 modal
+document.getElementById('addPlan').addEventListener('click', displayAddPlan);
 
-document.getElementById('addPlan').addEventListener('click', displayAddPlan)
 
-document.getElementById('add-facilities-building').addEventListener('click', displayAddFacilityBuilding)
 
-// document.getElementById('addPplan').addEventListener('click', displayAddPlan)
+function displayEditLocation(){
+    Swal.fire({
+        title: 'Edit Building Location',
+        html: `
+            <form id="building-location-form">
+                <label for="location-building">Location:</label>
+                <input type="text" id="location-building" name="location-building" required>
+            </form>`,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        showConfirmButton: true,
+        preConfirm: () => {
+            const locationInput = document.getElementById('location-building').value;
 
+            // You can perform input validation here if needed
+
+            // Create an object with the form data
+            const formData = {
+                location: locationInput,
+                buildingId: buildingId
+            };
+
+            // Make a POST request to your server to update the location
+            return fetch(uri_api + '/api/editBuildingLocation', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Parse the response JSON if needed
+                })
+                .then((data) => {
+                    // Handle the response from the server as needed
+                    console.log('Response:', data);
+
+                    // Reload the website upon successful editing
+                    if (data.success) {
+                        reloadWebsite();
+                    }
+
+                    return data; // This will close the SweetAlert2 modal
+                })
+                .catch((error) => {
+                    // Handle errors here
+                    console.error('There was a problem with the fetch operation:', error);
+                    Swal.showValidationMessage('An error occurred. Please try again.');
+                });
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire('Success!', 'Location editted successfully.', 'success');
+            reloadWebsite();
+        }
+    });
+}
+document.getElementById('edit-desc-button').addEventListener('click', displayEditLocation);
