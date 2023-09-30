@@ -138,35 +138,35 @@ function displayPlanBuildingTable(plans) {
 // var img_upload;
 function displayBuildingPicture(pictures) {
     const imageIds = ['image1', 'image2', 'image3']; // IDs of the <img> elements
+    const imageContainer = document.querySelector('.details-left');
 
     imageIds.forEach((imageId, index) => {
-        const pictureData = pictures[`picture${index + 1}`]; // Access picture1, picture2, picture3
-        const imgElement = document.getElementById(imageId);
+        if (pictures[`picture${index + 1}`]) {
+            console.log(`picture${index + 1}`);
+            console.log(pictures[`picture${index + 1}`]);
+            const imgElement = document.getElementById(imageId);
 
-        if (pictureData && pictureData.data) {
-            // Convert the byte array to a binary string
-            const byteArray = new Uint8Array(pictureData.data);
-            let binaryString = '';
-            byteArray.forEach(byte => {
-                binaryString += String.fromCharCode(byte);
-            });
+            // Assuming imageData is the Buffer (bytea) data from PostgreSQL
+            const bufferData = new Uint8Array(pictures[`picture${index + 1}`].data);
 
-            const base64Data = btoa(binaryString);
-            const decodedData = atob(base64Data);
-            const dataUrl = `data:image/png;base64,${decodedData}`;
+            // Convert the Uint8Array to a Blob
+            const blob = new Blob([bufferData], { type: 'image/jpg' }); // Adjust the type as needed
 
-            // Display the image using the HTML img element
-            imgElement.src = dataUrl;
-        } else {
-            // Handle the case where the picture data is empty or missing
-            imgElement.alt = 'Image not available';
-            imgElement.src = ''; // You can set a placeholder image or leave it empty
+            // Read the Blob as a data URL and set it as the src of the <img> element
+            const reader = new FileReader();
+            reader.onload = function () {
+                imgElement.src = reader.result;
+            };
+            reader.readAsDataURL(blob);
         }
     });
 }
 
 
 
+
+
+// script.js
 const uploadImages = async () => {
     const { value: file } = await Swal.fire({
         title: 'Upload Images',
