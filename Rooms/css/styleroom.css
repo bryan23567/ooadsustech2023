@@ -122,7 +122,6 @@ header nav a:focus {
 /* CSS for displaying images */
 .details-left img {
     max-width: 100%; /* Ensure images fit within their containers */
-    display: none; /* Hide images by default */
 }
 
 table.table-building,
