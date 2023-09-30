@@ -43,9 +43,9 @@ fetch(getRequest)
         displayFacilityBuildingTable(data.facilities);
         displayPlanBuildingTable(data.plan);
 
-        if(data.picture != null){
-            displayBuildingPicture(data.picture);
-        }
+        
+        displayBuildingPicture(data.picture);
+       
 
 
         // Print the status code
