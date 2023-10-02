@@ -280,56 +280,6 @@ function displayBuildingPicture(pictures) {
 }
 
 
-
-const uploadImages = async () => {
-    const { value: file } = await Swal.fire({
-        title: 'Upload Images',
-        input: 'file',
-        inputAttributes: {
-            multiple: 'multiple',
-            accept: 'image/*',
-        },
-        showCancelButton: true,
-        confirmButtonText: 'Upload',
-        inputValidator: (value) => {
-            if (!value) {
-                return 'You need to select at least one image to upload';
-            }
-        },
-    });
-
-    if (file) {
-        const images = Array.from(file);
-        const imageContainer = document.querySelector('.details-left');
-
-        // Display up to three selected images
-        for (let i = 0; i < Math.min(images.length, 3); i++) {
-            const img = new Image();
-            img.src = URL.createObjectURL(images[i]);
-            img.onload = function () {
-                const existingImage = imageContainer.querySelector(`#image${i + 1}`);
-                if (existingImage) {
-                    existingImage.src = this.src;
-                }
-            };
-        }
-
-        // You can handle the uploaded images as needed here.
-    }
-};
-
-// Function to check the image type
-function getImageType(images) {
-    for (const image of images) {
-        const acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-        if (!acceptedTypes.includes(image.type)) {
-            return 'Unknown';
-        }
-    }
-    return 'Valid';
-}
-
-
 function editPic() {
     console.log('Edit Pic');
     Swal.fire({

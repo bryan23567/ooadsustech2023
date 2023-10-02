@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <title>Building 1 map</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="w3schools-navbar.css">
     <link rel="stylesheet" href="css/styleroom.css">
-    <script src="scriptroom.js"></script>
-    <script src="/global.js"></script>
+    <script src="scriptroom.js" type="module" defer></script>
+    <!-- <script src="/global.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <header>
@@ -21,7 +21,7 @@
             </ul>
         </div>
         <nav>
-            <h1>Building 1</h1>
+            <h1 id="building-name"></h1>
             <a href="details.html"><b>Details</b></a>
             <a href="map.html"class="active"><b>Map</b></a>
         </nav>
@@ -29,27 +29,27 @@
     </header>
     <main>
         <aside class="left">
-            <div class="active"><a href="map.html" id="floor-num-id">2nd Floor (Men)</a></div>
+            <!-- <div class="active"><a href="map.html" id="floor-num-id">2nd Floor (Men)</a></div>
             <div><a href="map.html" id="floor-num-id">3rd Floor (Men)</a></div>
             <div><a href="map.html" id="floor-num-id">4th Floor (Men)</a></div>
             <div><a href="map.html" id="floor-num-id">5th Floor (Men)</a></div>
-            <div><a href="map.html" id="floor-num-id">6th Floor (Men)</a></div>
+            <div><a href="map.html" id="floor-num-id">6th Floor (Men)</a></div> -->
         </aside>
         <aside class="right">
             <aside class="left-map">
                 <aside class="left-even">
-                    <div id="room-id" onclick="showOccupying('202')"><b>202</b><br>double<br>available:0</div>
+                    <!-- <div id="room-id" onclick="showOccupying('202')"><b>202</b><br>double<br>available:0</div>
                     <div id="room-id" onclick="showOccupying('204')"><b>204</b><br>double<br>available:2</div>
                     <div id="room-id" onclick="showOccupying('206')"><b>206</b><br>double<br>available:2</div>
                     <div id="room-id" onclick="showOccupying('208')"><b>208</b><br>double<br>available:2</div>
-                    <div id="room-id" onclick="showOccupying('210')"><b>210</b><br>double<br>available:2</div>
+                    <div id="room-id" onclick="showOccupying('210')"><b>210</b><br>double<br>available:2</div> -->
                 </aside>
                 <aside class="right-odd">
-                    <div id="room-id" onclick="showOccupying('201')"><b>201</b><br>double<br>available:2</div>
+                    <!-- <div id="room-id" onclick="showOccupying('201')"><b>201</b><br>double<br>available:2</div>
                     <div id="room-id" onclick="showOccupying('203')"><b>203</b><br>double<br>available:2</div>
                     <div id="room-id" onclick="showOccupying('205')"><b>205</b><br>double<br>available:2</div>
                     <div id="room-id" onclick="showOccupying('207')"><b>207</b><br>double<br>available:2</div>
-                    <div id="room-id" onclick="showOccupying('209')"><b>209</b><br>double<br>available:2</div>
+                    <div id="room-id" onclick="showOccupying('209')"><b>209</b><br>double<br>available:2</div> -->
                 </aside>
             </aside>
             <aside class="right-info">
@@ -60,7 +60,7 @@
                         <th>Amount</th>
                         <th>operation</th>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td id="facility-name-floor-id">Activity Room</td>
                         <td id="amount-floor-id">1</td>
                         <td><button>edit</button><button class="delete-facility-floor" onclick="deleteRow(this)">delete</button></td>
@@ -84,46 +84,33 @@
                         <td id="facility-name-floor-id">Water Dispenser</td>
                         <td id="amount-floor-id">6</td>
                         <td><button>edit</button><button class="delete-facility-floor" onclick="deleteRow(this)">delete</button></td>
-                    </tr>
+                    </tr> -->
                 </table>
-                <button id="add-facilities-floor" onclick="displayAddFacility()">
+                <button id="add-facilities-floor">
                     add facility
                 </button>
-                    <form id="facility-form" style="display: none;" onsubmit="return addFacilityFloor()">
-                        <label for="facility-name-floor">Name:</label>
-                        <input type="text" id="facility-name-floor" name="facility-name-floor" required>
-                        <br>
-                        <label for="facility-amount-floor">Amount:</label>
-                        <input type="number" id="facility-amount-floor" name="facility-amount-floor" required>
-                        <br>
-                        <button type="submit">add</button>
-                    </form>
+                
                 <div id="occupying-info">
                     <h3>
                         Occupying:
                     </h3>
-                    <h4>Room 101</h4>
+                    <h4 id="room-number-occupying">Room </h4>
                     <table class="occupying-table">
                         <tr>
                             <th>Name</th>
                             <th>operation</th>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td>Lam Nguyen</td>
                             <td><button class="delete-occupying" onclick="deleteRow(this)">delete</button></td>
                         </tr>
                             <td>Bryan Anthony</td>
-                            <td><button class="delete-occupying" onclick="deleteRow(this)">delete</button></td>
+                            <td><button class="delete-occupying" onclick="deleteRow(this)">delete</button></td> -->
                     </table>
-                    <button id="add-occupying" onclick="displayAddStudent()">
+                    <button id="add-occupying">
                         add student
                     </button>
-                    <form id="add-occupying-form" style="display: none;">
-                        <label for="add-stu-id-occupying-room">SID:</label>
-                        <input type="text" id="add-stu-id-occupying-room" name="sid-occupying" required pattern="[0-9]{8}">
-                        <br>
-                        <button type="submit">submit</button>
-                    </form>
+    
                 </div>
             </aside>
         </aside>

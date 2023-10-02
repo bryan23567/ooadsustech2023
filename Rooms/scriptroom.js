@@ -1,180 +1,11 @@
 
-// Link to the Backend API
-// ------------------------------------------------------------------------------------------------------
-
-console.log("hghgfhfhgf");
-
-const apiUrl = 'http://10.27.175.123:2334' + '/api/building/6cf4a19e-d547-4e00-b2b2-cb44e1cd3123';
-
-
-// Define the headers for the request
-const headers = new Headers({
-    'Content-Type': 'application/json',
-});
-
-// Create the request object
-const request = new Request(apiUrl, {
-    method: 'GET',
-    headers: headers,
-});
-
-// Make the API request using the Fetch API
-fetch(request)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json(); // Parse the response JSON
-    })
-    .then(data => {
-        // Print the response body
-        console.log('Response Body:', data);
-    
-        // Display building information on the page
-        displayBuildingInfo(data);
-        //displayBuildingLocation(data.location);
-        //displayFacilityBuildingTable(data.facility);
-        //displayplanBuildingTable(data.plan);
-        //displayBuildingPicture(data.picture);
-        
-        // Print the status code
-        console.log('Status Code:', data.status);
-    })    
-    .catch(error => {
-        // Handle errors here
-        console.error('There was a problem with the fetch operation:', error);
-    });
+// FUNCTION DISPLAYING THE DATA FROM BACKEND
 
 
 
-
-function displayBuildingInfo(buildingInfo) {
-    const buildingInfoDiv = document.getElementById('details-right');
-    buildingInfoDiv.innerHTML = `
-        <h2>Location</h2>
-        <p>${buildingInfo.location}</p>
-        <h2>Facilities</h2>
-        <table class="table-building">
-            <tr>
-                <th>Name</th>
-                <th>Location</th>
-                <th>Operation</th>
-            </tr>
-            ${generateFacilitiesHTML(buildingInfo.facilities)}
-        </table>
-        <button id="add-facilities-building" onclick="displayAddFacilityBuilding()">
-            Add Facility
-        </button>
-        <form id="facility-building-form" style="display: none;" onsubmit="return addFacilityFloor()">
-            <label for="facility-name-building">Name:</label>
-            <input type="text" id="facility-name-building" name="facility-name-building" required>
-            <br>
-            <label for="facility-amount-building">Amount:</label>
-            <input type="number" id="facility-amount-building" name="facility-amount-building" required>
-            <br>
-            <button type="submit">Add</button>
-        </form>
-        <!-- Add other building information here -->
-    `;
-}
+// FUNCTION ------------------------------------------------------------------------------------------------------------------
 
 
-// Function to generate HTML for facilities based on data received from the backend
-function generateFacilitiesHTML(facilities) {
-    return facilities.map(facility => `
-        <tr>
-            <td>${facility.name}</td>
-            <td>${facility.location}</td>
-            <td class="operate-building">
-                <button>edit</button>
-                <button class="delete-facility-building" onclick="deleteRow(this)">delete</button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-
-
-
-
-function addFacilityBuilding(){
-    console.log("Add Facility Floor!")
-    var name = document.getElementById("facility-name-floor").value;
-    var amount = document.getElementById("facility-amount-floor").value;
-
-    const table = document.getElementById(".table-building");
-
-    const row = table.insertRow(-1);
-    row.insertCell(0).textContent = name;
-    row.insertCell(1).textContent = 'Floor ' + amount;
-    row.insertCell(2).innerHTML = `
-    <button>edit</button>
-    <button class="delete-facility-building" onclick="deleteRow(this)">delete</button>
-    `;
-    
-
-    return false;
-}
-
-
-function displayAddFacilityBuilding() {
-    var showButton = document.getElementById("add-facilities-building");
-    var addFacilityBuildingForm = document.getElementById("facility-building-form");
-
-    if (addFacilityBuildingForm.style.display === "none" || addFacilityBuildingForm.style.display === "") {
-        addFacilityBuildingForm.style.display = "block";
-    } else {
-        addFacilityBuildingForm.style.display = "none";
-    }
-}
-
-function displayAddPlan(){
-    var showButton = document.getElementById("add-plan");
-    var addPlanForm = document.getElementById("plan-building-form");
-
-    if(addPlanForm.style.display == "none" || addPlanForm.style.display == ""){
-        addPlanForm.style.display = "block";
-    }
-    else{
-        addPlanForm.style.display = "none";
-    }
-
-}
-
-function displayDescription(){
-    var showButton = document.getElementById("edit-desc-button");
-    var addDescripttion = document.getElementById("edit-desc");
-
-    if(addDescripttion.style.display == "none" || addDescripttion.style.display == ""){
-        addDescripttion.style.display = "block";
-    }
-    else{
-        addDescripttion.style.display = "none";
-    }
-}
-
-function displayAddFacility(){
-    var showButton = document.getElementById("add-facilities-floor");
-    var addFacility = document.getElementById("facility-form");
-
-    if(addFacility.style.display == "none" || addFacility.style.display == ""){
-        addFacility.style.display = "block";
-    } else{
-        addFacility.style.display = "none";
-    }
-}
-
-function displayAddStudent(){
-    var showButton = document.getElementById("add-occupying");
-    var addStudent = document.getElementById("add-occupying-form");
-
-    if(addStudent.style.display == "none" || addStudent.style.display == ""){
-        addStudent.style.display = "block";
-    } else{
-        addStudent.style.display = "none";
-    }
-}
 
 function showOccupying(roomId) {
     // Remove 'active' class from all room elements
@@ -263,9 +94,53 @@ function getRoomInfo(roomId) {
 }
 
 
+function displayAddFloorFasility(){
 
+    Swal.fire({
+     
+        html:
+            `
+            <form id="plan-building-form" enctype="multipart/form-data">
+                <label for="floor-facility-name">Plan:</label>
+                <input type="text" id="floor-facility-name" name="floor-facility-name" required>
+                <br>
+                <label for="floor-amount">Location:</label>
+                <input type="text" id="floor-amount" name="floor-amount" required>
+                <br>
+            </form>
+            `,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        showConfirmButton:true
+     
+     
+    })
+}
 
+function displayAddStudentOccupying(){
 
+    Swal.fire({
+     
+        html:
+            `
+            <form id="plan-building-form" enctype="multipart/form-data">
+                <label for="stu-occ-id">SID:</label>
+                <input type="text" id="stu-occ-id" name="stu-occ-id" required>
+            </form>
+            `,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        showConfirmButton:true
+     
+     
+    })
+}
+
+document.getElementById('add-facilities-floor').addEventListener('click', displayAddFloorFasility);
+
+document.getElementById('add-occupying').addEventListener('click', displayAddStudentOccupying);
 
 function deleteRow(button){
     if(confirm("Are you sure you want to delete?")){
