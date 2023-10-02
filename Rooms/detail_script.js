@@ -33,7 +33,7 @@ fetch(getRequest)
         // Print the response body
         hideLoadingScreen();
 
-        console.log('Response Body:', data);
+        console.log('Response Body For Details:', data);
 
         // Display building information on the page
         //displayBuildingInfo(data);
