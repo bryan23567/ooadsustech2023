@@ -13,13 +13,13 @@ const headers = new Headers({
 });
 
 // Create the request object
-const getRequest = new Request(apiUrl, {
+const request = new Request(apiUrl, {
     method: 'GET',
     headers: headers,
 });
 
 // Make the API request using the Fetch API
-fetch(getRequest)
+fetch(request)
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -28,23 +28,18 @@ fetch(getRequest)
     })
     .then(data => {
         // Print the response body
-        hideLoadingScreen();
-
-        console.log('Response Body For Map:', data);
-
-        //buildingName = data.name;
-        //buildingId = data.buildingId;
-        //floors = data.floors;
-        //location = data.location;
-
-        displayBuildingName(data.name);
-        displayFloorNumbers(data.floors);
-        displayFloorFacilities(data.floors[0].floorFacilities);
-
-
+        console.log('Response Body:', data);
+    
+        // Display building information on the page
+        displayBuildingInfo(data);
+        //displayBuildingLocation(data.location);
+        //displayFacilityBuildingTable(data.facility);
+        //displayplanBuildingTable(data.plan);
+        //displayBuildingPicture(data.picture);
+        
         // Print the status code
         console.log('Status Code:', data.status);
-    })
+    })    
     .catch(error => {
 
         hideLoadingScreen();
@@ -55,278 +50,134 @@ fetch(getRequest)
     });
 
 
-// 
 
 
-// Function to show the loading screen
-function showLoadingScreen() {
-    const loadingScreen = document.getElementById('loading-screen');
-    loadingScreen.style.display = 'block';
-}
-
-function hideLoadingScreen() {
-    const loadingScreen = document.getElementById('loading-screen');
-    loadingScreen.style.display = 'none';
-}
-
-// FUNCTION DISPLAYING THE DATA FROM BACKEND
-
-function displayBuildingName(name) {
-    var building_name = document.getElementById("building-name");
-    building_name.innerHTML = name;
-}
-
-function displayFloorNumbers(arrayFloors) {
-    var aside = document.querySelector('.left');
-
-    for (var i = 0; i < arrayFloors.length; i++) {
-        var floorNumber = arrayFloors[i].name;
-        var floorId = arrayFloors[i].floorId;
-        var floorLink = document.createElement('div');
-        var floorAnchor = document.createElement('a');
-
-        console.log("Floor Number", floorNumber);
-        console.log("Floor Id", floorId);
-        console.log("Floor Link", floorLink);
-        console.log("Floor Anchor", floorAnchor);
-
-        floorAnchor.textContent = floorNumber;
-        floorAnchor.dataset.floorId = floorId; // Store the floorId as a data attribute
-
-        // Add a click event listener to each floor anchor
-        floorAnchor.addEventListener('click', function(event) {
-            var clickedFloorId = event.target.dataset.floorId;
-            fetchFloorData(clickedFloorId); // Call a function to fetch and display data for the clicked floor
-        });
-
-        floorLink.appendChild(floorAnchor);
-        aside.appendChild(floorLink);
-    }
-}
-
-// Function to fetch and display data for a specific floor
-function fetchFloorData(floorId) {
-    console.log("Floor ID:", floorId);
-    // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint to fetch floor data
-    fetch(uri_api + `/api/floorRooms/${floorId}`)
-        .then(response => response.json())
-        .then(data => {
-            // Call a function to display the data for the selected floor
-            console.log(data);
-            displayRoomBlocks(data.rooms); // Use the previously provided function to display data
-            displayFloorFacilities(data.floorFacilities);
-        })
-        .catch(error => {
-            console.error('Error fetching floor data:', error);
-            // Handle errors if needed
-        });
+function displayBuildingInfo(buildingInfo) {
+    const buildingInfoDiv = document.getElementById('details-right');
+    buildingInfoDiv.innerHTML = `
+        <h2>Location</h2>
+        <p>${buildingInfo.location}</p>
+        <h2>Facilities</h2>
+        <table class="table-building">
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Operation</th>
+            </tr>
+            ${generateFacilitiesHTML(buildingInfo.facilities)}
+        </table>
+        <button id="add-facilities-building" onclick="displayAddFacilityBuilding()">
+            Add Facility
+        </button>
+        <form id="facility-building-form" style="display: none;" onsubmit="return addFacilityFloor()">
+            <label for="facility-name-building">Name:</label>
+            <input type="text" id="facility-name-building" name="facility-name-building" required>
+            <br>
+            <label for="facility-amount-building">Amount:</label>
+            <input type="number" id="facility-amount-building" name="facility-amount-building" required>
+            <br>
+            <button type="submit">Add</button>
+        </form>
+        <!-- Add other building information here -->
+    `;
 }
 
 
-function displayRoomBlocks(arrayRoomPerFloor) {
-    console.log(arrayRoomPerFloor);
-    var leftEven = document.querySelector('.left-even');
-    var rightOdd = document.querySelector('.right-odd');
-
-    // Clear the previous room data in left-even and right-odd containers
-    clearRoomData(leftEven);
-    clearRoomData(rightOdd);
-
-    function clearRoomData(container) {
-        while (container.firstChild) {
-            container.removeChild(container.firstChild);
-        }
-    }
-
-    for (var i = 0; i < arrayRoomPerFloor.length; i++) {
-        var room = arrayRoomPerFloor[i];
-        var roomName = parseInt(room.name, 10);
-        var roomId = room.roomId;
-        var roomType = room.type;
-        var available;
-
-        // Get availability from your data
-        var len;
-        if (roomType == 'single') {
-            len = 1;
-        } else if (roomType == 'double') {
-            len = 2;
-        } else if (roomType == 'triple') {
-            len = 3;
-        } else {
-            len = 4;
-        }
-
-    
-        console.log(room);
-        console.log(roomName);
-        console.log(roomId);
-        console.log(roomType);
-        
-        var isEven = roomName % 2 == 0; // Check if roomId is even
-
-        // Create the room div element
-        var roomDiv = document.createElement('div');
-        roomDiv.className = 'room-id'; // Use className instead of name
-        roomDiv.innerHTML = `<b>${roomName}</b><br>${roomType}<br>available: ${available}`;
-
-        // Create a function to handle the click event with the correct roomId
-        function handleRoomClick(roomId, roomName) {
-            return function() {
-                fetchRoomOccupiedData(roomId, roomName); // Fetch and display room occupied data
-            };
-        }
-
-        if (isEven) {
-            roomDiv.onclick = handleRoomClick(roomId, roomName);
-            leftEven.appendChild(roomDiv); // Append to left-even container
-        } else {
-            roomDiv.onclick = handleRoomClick(roomId, roomName);
-            rightOdd.appendChild(roomDiv); // Append to right-odd container
-        }
-    }
-}
-
-
-function fetchRoomOccupiedData(roomId, roomName) {
-    // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint to fetch room occupied data
-    fetch(uri_api + `/api/roomOccupied/${roomId}`)
-        .then(response => response.json())
-        .then(data => {
-            // Call the displayOccupyingRoom function to display the data for the selected room
-            console.log(data);
-            displayOccupyingRoom(roomName, data.occupied);
-        })
-        .catch(error => {
-            console.error('Error fetching room occupied data:', error);
-            // Handle errors if needed
-        });
-}
-
-
-
-function displayOccupyingRoom(roomName, arrayStudentOccupying) {
-    console.log(roomName);
-
-    var room_num = document.getElementById("room-number-occupying");
-    var tableBody = document.querySelector('.occupying-table');
-
-    // Clear the previous data rows, keeping the first row (category row)
-    while (tableBody.children.length > 1) {
-        tableBody.removeChild(tableBody.lastChild);
-    }
-
-    room_num.innerHTML = 'Room ' + roomName;
-
-    for (var i = 0; i < arrayStudentOccupying.length; i++) {
-        var student = arrayStudentOccupying[i];
-        var studentName = student.user.name; // Get student name from your data
-        var studentSID = student.user.sid;
-
-        // Create a new table row
-        var newRow = document.createElement('tr');
-
-        // Create table data cells for student name and operation
-        var nameCell = document.createElement('td');
-        var operationCell = document.createElement('td');
-
-        // Create a button for deleting the student
-        var deleteButton = document.createElement('button');
-        deleteButton.className = 'delete-occupying';
-        deleteButton.textContent = 'delete';
-
-        // Attach a click event handler to the delete button
-        deleteButton.onclick = function () {
-            deleteRow(this);
-        };
-
-        // Set the student name in the name cell
-        nameCell.textContent = studentName;
-
-        // Append the delete button to the operation cell
-        operationCell.appendChild(deleteButton);
-
-        // Append the cells to the table row
-        newRow.appendChild(nameCell);
-        newRow.appendChild(operationCell);
-
-        // Append the row to the table body
-        tableBody.appendChild(newRow);
-    }
-}
-
-
-function displayFloorFacilities(arrayFacilitiesFloor) {
-
-    console.log("Displaying Floor Facility!");
-    var tableBody = document.querySelector('.table-floor');
-
-    // Clear the previous data rows, keeping the first row (category row)
-    while (tableBody.children.length > 1) {
-        tableBody.removeChild(tableBody.lastChild);
-    }
-
-    arrayFacilitiesFloor.forEach(function (facility, index) {
-        var newRow = document.createElement("tr");
-
-        var facilityName = facility.name;
-        var facilityAmount = facility.Amount;
-        //var facilityLoc = facility.location;
-
-        newRow.innerHTML = `
-            <td>${facilityName}</td>
-            <td>${facilityAmount}</td>
-            <td>
-            <button class="delete-floor-facility" facility-id="${index}">Delete</button>
+// Function to generate HTML for facilities based on data received from the backend
+function generateFacilitiesHTML(facilities) {
+    return facilities.map(facility => `
+        <tr>
+            <td>${facility.name}</td>
+            <td>${facility.location}</td>
+            <td class="operate-building">
+                <button>edit</button>
+                <button class="delete-facility-building" onclick="deleteRow(this)">delete</button>
             </td>
-        `;
-        tableBody.appendChild(newRow);
-    });
+        </tr>
+    `).join('');
+}
 
-    // Add click event listeners to the "Delete" buttons;
-    var deleteButtons = document.querySelectorAll('.delete-floor-facility');
-    deleteButtons.forEach(function (button) {
-        button.addEventListener('click', deleteMapFacility); //???
-    });
-    // for (var i = 0; i < arrayFacilitiesFloor.length; i++) {
-    //     var facility = arrayFacilitiesFloor[i];
-    //     var facilityName = facility.name; // Get facility name from your data
-    //     //var facilityAmount = facility.amount; // Get facility amount from your data
+//----------------------------------------------------------------------------------------------------------------------
 
-    //     // Create a new table row
-    //     var newRow = document.createElement('tr');
 
-    //     // Create table data cells for facility name, amount, and operation
-    //     var nameCell = document.createElement('td');
-    //     var amountCell = document.createElement('td');
-    //     var operationCell = document.createElement('td');
 
-    //     // Set the facility name and amount in their respective cells
-    //     nameCell.textContent = facilityName;
-    //     //amountCell.textContent = facilityAmount;
 
-    //     // Create buttons for edit and delete operations
-    //     var editButton = document.createElement('button');
-    //     editButton.textContent = 'edit';
+function addFacilityBuilding(){
+    console.log("Add Facility Floor!")
+    var name = document.getElementById("facility-name-floor").value;
+    var amount = document.getElementById("facility-amount-floor").value;
 
-    //     var deleteButton = document.createElement('button');
-    //     deleteButton.className = 'delete-facility-floor';
-    //     deleteButton.textContent = 'delete';
-    //     deleteButton.onclick = function () {
-    //         deleteRow(this);
-    //     };
+    const table = document.getElementById(".table-building");
 
-    //     // Append buttons to the operation cell
-    //     operationCell.appendChild(editButton);
-    //     operationCell.appendChild(deleteButton);
-    //     // Append cells to the row
-    //     newRow.appendChild(nameCell);
-    //     newRow.appendChild(amountCell);
-    //     newRow.appendChild(operationCell);
+    const row = table.insertRow(-1);
+    row.insertCell(0).textContent = name;
+    row.insertCell(1).textContent = 'Floor ' + amount;
+    row.insertCell(2).innerHTML = `
+    <button>edit</button>
+    <button class="delete-facility-building" onclick="deleteRow(this)">delete</button>
+    `;
+    
 
-    //     // Append the row to the table body
-    //     tableBody.appendChild(newRow);
-    // }
+    return false;
+}
+
+
+function displayAddFacilityBuilding() {
+    var showButton = document.getElementById("add-facilities-building");
+    var addFacilityBuildingForm = document.getElementById("facility-building-form");
+
+    if (addFacilityBuildingForm.style.display === "none" || addFacilityBuildingForm.style.display === "") {
+        addFacilityBuildingForm.style.display = "block";
+    } else {
+        addFacilityBuildingForm.style.display = "none";
+    }
+}
+
+function displayAddPlan(){
+    var showButton = document.getElementById("add-plan");
+    var addPlanForm = document.getElementById("plan-building-form");
+
+    if(addPlanForm.style.display == "none" || addPlanForm.style.display == ""){
+        addPlanForm.style.display = "block";
+    }
+    else{
+        addPlanForm.style.display = "none";
+    }
+
+}
+
+function displayDescription(){
+    var showButton = document.getElementById("edit-desc-button");
+    var addDescripttion = document.getElementById("edit-desc");
+
+    if(addDescripttion.style.display == "none" || addDescripttion.style.display == ""){
+        addDescripttion.style.display = "block";
+    }
+    else{
+        addDescripttion.style.display = "none";
+    }
+}
+
+function displayAddFacility(){
+    var showButton = document.getElementById("add-facilities-floor");
+    var addFacility = document.getElementById("facility-form");
+
+    if(addFacility.style.display == "none" || addFacility.style.display == ""){
+        addFacility.style.display = "block";
+    } else{
+        addFacility.style.display = "none";
+    }
+}
+
+function displayAddStudent(){
+    var showButton = document.getElementById("add-occupying");
+    var addStudent = document.getElementById("add-occupying-form");
+
+    if(addStudent.style.display == "none" || addStudent.style.display == ""){
+        addStudent.style.display = "block";
+    } else{
+        addStudent.style.display = "none";
+    }
 }
 
 
