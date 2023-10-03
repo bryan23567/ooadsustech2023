@@ -22,7 +22,7 @@ body {
 }
 
 .coordinates {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     background-color: rgba(255, 255, 255, 0.7);
@@ -66,4 +66,34 @@ body {
 
 .form-popup input[type="submit"]:hover {
     background-color: #0056b3;
+}
+
+/* Style for marked points (circles) */
+.marked-point {
+    width: 20px; /* Adjust the size of the circle as needed */
+    height: 20px; /* Same as width for a perfect circle */
+    background-color: red; /* Change the color as desired */
+    border-radius: 50%; /* Makes it a circle */
+    position: absolute;
+    cursor: pointer;
+    text-decoration: none; /* Remove underlines from anchor elements */
+    z-index: 1;
+}
+
+.building-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background-color: black;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 12px;
+    position: relative;
+    /*line-height: 20px;
+    top: -10px; /* Adjust the positioning to center the text 
+    left: -10px; /* Adjust the positioning to center the text */
+    z-index: 2;
 }
