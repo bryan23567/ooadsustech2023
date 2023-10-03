@@ -7,6 +7,22 @@ const apiUrl = uri_api + '/api/mapBuilding/6cf4a19e-d547-4e00-b2b2-cb44e1cd3123'
 
 showLoadingScreen();
 
+var floorFacilitiesId;
+
+var floorNumber;
+var floorId;
+var floorLink;
+var floorAnchor;
+
+var room;
+var roomName;
+var roomId;
+var roomType;
+
+var student;
+var studentName;
+var studentSID;
+
 // Define the headers for the request
 const headers = new Headers({
     'Content-Type': 'application/json',
@@ -31,11 +47,6 @@ fetch(getRequest)
         hideLoadingScreen();
 
         console.log('Response Body For Map:', data);
-
-        //buildingName = data.name;
-        //buildingId = data.buildingId;
-        //floors = data.floors;
-        //location = data.location;
 
         displayBuildingName(data.name);
         displayFloorNumbers(data.floors);
@@ -69,6 +80,41 @@ function hideLoadingScreen() {
     loadingScreen.style.display = 'none';
 }
 
+function reloadContent(apiEndpoint, targetElementId, reloadPage = false, requestData = {}) {
+    // Define the request headers for a POST request
+    const headers = new Headers({
+        'Content-Type': 'application/json',
+    });
+
+    // Create the request object for a POST request
+    const postRequest = new Request(uri_api + apiEndpoint, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(requestData), // Pass request data as JSON
+    });
+
+    fetch(postRequest)
+        .then(response => response.json())
+        .then(data => {
+            // Update the HTML of the target element with the new data
+            document.getElementById(targetElementId).innerHTML = data.content;
+
+            // Optionally, reload the page
+            if (reloadPage) {
+                location.reload();
+            }
+        })
+        .catch(error => {
+            console.error(`Error reloading ${apiEndpoint}:`, error);
+        });
+}
+
+
+// reloadContent('/api/addFloorFacilities', 'add-facilities-floor');
+// reloadContent('/api/addOccupiying', 'occupying-info');
+// reloadContent('/api/deletefloorFacilities', 'add-facilities-floor');
+// reloadContent('/api/deleteOccupiying', 'occupying-info');
+
 // FUNCTION DISPLAYING THE DATA FROM BACKEND
 
 function displayBuildingName(name) {
@@ -80,15 +126,15 @@ function displayFloorNumbers(arrayFloors) {
     var aside = document.querySelector('.left');
 
     for (var i = 0; i < arrayFloors.length; i++) {
-        var floorNumber = arrayFloors[i].name;
-        var floorId = arrayFloors[i].floorId;
-        var floorLink = document.createElement('div');
-        var floorAnchor = document.createElement('a');
+        floorNumber = arrayFloors[i].name;
+        floorId = arrayFloors[i].floorId;
+        floorLink = document.createElement('div');
+        floorAnchor = document.createElement('a');
 
-        console.log("Floor Number", floorNumber);
-        console.log("Floor Id", floorId);
-        console.log("Floor Link", floorLink);
-        console.log("Floor Anchor", floorAnchor);
+        // console.log("Floor Number", floorNumber);
+        // console.log("Floor Id", floorId);
+        // console.log("Floor Link", floorLink);
+        // console.log("Floor Anchor", floorAnchor);
 
         floorAnchor.textContent = floorNumber;
         floorAnchor.dataset.floorId = floorId; // Store the floorId as a data attribute
@@ -123,6 +169,8 @@ function fetchFloorData(floorId) {
 }
 
 
+var len;
+var available;
 function displayRoomBlocks(arrayRoomPerFloor) {
     console.log(arrayRoomPerFloor);
     var leftEven = document.querySelector('.left-even');
@@ -139,14 +187,12 @@ function displayRoomBlocks(arrayRoomPerFloor) {
     }
 
     for (var i = 0; i < arrayRoomPerFloor.length; i++) {
-        var room = arrayRoomPerFloor[i];
-        var roomName = parseInt(room.name, 10);
-        var roomId = room.roomId;
-        var roomType = room.type;
-        var available;
+        room = arrayRoomPerFloor[i];
+        roomName = parseInt(room.name, 10);
+        roomId = room.roomId;
+        roomType = room.type;
 
         // Get availability from your data
-        var len;
         if (roomType == 'single') {
             len = 1;
         } else if (roomType == 'double') {
@@ -219,9 +265,9 @@ function displayOccupyingRoom(roomName, arrayStudentOccupying) {
     room_num.innerHTML = 'Room ' + roomName;
 
     for (var i = 0; i < arrayStudentOccupying.length; i++) {
-        var student = arrayStudentOccupying[i];
-        var studentName = student.user.name; // Get student name from your data
-        var studentSID = student.user.sid;
+        student = arrayStudentOccupying[i];
+        studentName = student.user.name; // Get student name from your data
+        studentSID = student.user.sid;
 
         // Create a new table row
         var newRow = document.createElement('tr');
@@ -253,12 +299,18 @@ function displayOccupyingRoom(roomName, arrayStudentOccupying) {
         // Append the row to the table body
         tableBody.appendChild(newRow);
     }
+
+    var deleteButtons = document.querySelectorAll('.delete-occupying');
+    deleteButtons.forEach(function(button){
+        button.addEventListener('click', deleteMapStudent);
+    });
 }
 
 
 function displayFloorFacilities(arrayFacilitiesFloor) {
 
     console.log("Displaying Floor Facility!");
+    console.log(arrayFacilitiesFloor);
     var tableBody = document.querySelector('.table-floor');
 
     // Clear the previous data rows, keeping the first row (category row)
@@ -267,10 +319,13 @@ function displayFloorFacilities(arrayFacilitiesFloor) {
     }
 
     arrayFacilitiesFloor.forEach(function (facility, index) {
+        // console.log("Facility", facility);
         var newRow = document.createElement("tr");
 
         var facilityName = facility.name;
         var facilityAmount = facility.Amount;
+        
+        floorFacilitiesId = facility.floorFacilitiesId;
         //var facilityLoc = facility.location;
 
         newRow.innerHTML = `
@@ -286,47 +341,8 @@ function displayFloorFacilities(arrayFacilitiesFloor) {
     // Add click event listeners to the "Delete" buttons;
     var deleteButtons = document.querySelectorAll('.delete-floor-facility');
     deleteButtons.forEach(function (button) {
-        button.addEventListener('click', deleteMapFacility); //???
+        button.addEventListener('click', deleteMapFacility); 
     });
-    // for (var i = 0; i < arrayFacilitiesFloor.length; i++) {
-    //     var facility = arrayFacilitiesFloor[i];
-    //     var facilityName = facility.name; // Get facility name from your data
-    //     //var facilityAmount = facility.amount; // Get facility amount from your data
-
-    //     // Create a new table row
-    //     var newRow = document.createElement('tr');
-
-    //     // Create table data cells for facility name, amount, and operation
-    //     var nameCell = document.createElement('td');
-    //     var amountCell = document.createElement('td');
-    //     var operationCell = document.createElement('td');
-
-    //     // Set the facility name and amount in their respective cells
-    //     nameCell.textContent = facilityName;
-    //     //amountCell.textContent = facilityAmount;
-
-    //     // Create buttons for edit and delete operations
-    //     var editButton = document.createElement('button');
-    //     editButton.textContent = 'edit';
-
-    //     var deleteButton = document.createElement('button');
-    //     deleteButton.className = 'delete-facility-floor';
-    //     deleteButton.textContent = 'delete';
-    //     deleteButton.onclick = function () {
-    //         deleteRow(this);
-    //     };
-
-    //     // Append buttons to the operation cell
-    //     operationCell.appendChild(editButton);
-    //     operationCell.appendChild(deleteButton);
-    //     // Append cells to the row
-    //     newRow.appendChild(nameCell);
-    //     newRow.appendChild(amountCell);
-    //     newRow.appendChild(operationCell);
-
-    //     // Append the row to the table body
-    //     tableBody.appendChild(newRow);
-    // }
 }
 
 
@@ -388,7 +404,7 @@ function getRoomInfo(roomId) {
                 <tr>
                     <td>${occupant.name}</td>
                     <td>
-                        <button class="delete-occupying" onclick="deleteRow(this)">delete</button>
+                        <button class="delete-occupying">delete</button>
                     </td>
                 </tr>
             `;
@@ -404,17 +420,18 @@ function getRoomInfo(roomId) {
 }
 
 
-function displayAddFloorFasility(){
+function displayAddFloorFacility(){
 
     Swal.fire({
+        title: 'Add Floor Facility',
      
         html:
             `
             <form id="plan-building-form" enctype="multipart/form-data">
-                <label for="floor-facility-name">Plan:</label>
+                <label for="floor-facility-name">Facility:</label>
                 <input type="text" id="floor-facility-name" name="floor-facility-name" required>
                 <br>
-                <label for="floor-amount">Location:</label>
+                <label for="floor-amount">Amount:</label>
                 <input type="text" id="floor-amount" name="floor-amount" required>
                 <br>
             </form>
@@ -422,10 +439,53 @@ function displayAddFloorFasility(){
         showCloseButton: true,
         showCancelButton: true,
         focusConfirm: false,
-        showConfirmButton:true
-     
-     
-    })
+        showConfirmButton:true,
+        preConfirm: () => {
+            const planNameInput = document.getElementById('floor-facility-name').value;
+            const amountInput = document.getElementById('floor-amount').value;
+
+            // You can perform input validation here if needed
+
+            // Create an object with the form data
+            const formData = {
+                name: planNameInput,
+                Amount: amountInput,
+                floorId: floorId,
+            };
+
+            // Make a POST request to your server
+            return fetch(uri_api + '/api/addFloorFacilities', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Parse the response JSON if needed
+                })
+                .then((data) => {
+                    // Handle the response from the server as needed
+                    console.log('Response:', data);
+
+                    // Optionally, you can perform additional actions after a successful POST request
+                    return data; // This will close the SweetAlert2 modal
+                })
+                .catch((error) => {
+                    // Handle errors here
+                    console.error('There was a problem with the fetch operation:', error);
+                    Swal.showValidationMessage('An error occurred. Please try again.');
+                });
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire('Success!', 'Facility added successfully.', 'success');
+            // reloadContent('/api/addFloorFacilities', 'add-facilities-floor');
+        }
+    });
 }
 
 function displayAddStudentOccupying(){
@@ -442,13 +502,54 @@ function displayAddStudentOccupying(){
         showCloseButton: true,
         showCancelButton: true,
         focusConfirm: false,
-        showConfirmButton:true
-     
-     
-    })
+        showConfirmButton:true,
+        preConfirm: () => {
+            const studentIdInput = document.getElementById('stu-occ-id').value;
+            
+            // You can perform input validation here if needed
+
+            // Create an object with the form data
+            const formData = {
+                roomId: roomId,
+                userId: studentIdInput,
+            };
+
+            // Make a POST request to your server
+            return fetch(uri_api + '/api/addOccupiying', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Parse the response JSON if needed
+                })
+                .then((data) => {
+                    // Handle the response from the server as needed
+                    console.log('Response:', data);
+
+                    // Optionally, you can perform additional actions after a successful POST request
+                    return data; // This will close the SweetAlert2 modal
+                })
+                .catch((error) => {
+                    // Handle errors here
+                    console.error('There was a problem with the fetch operation:', error);
+                    Swal.showValidationMessage('An error occurred. Please try again.');
+                });
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire('Success!', 'Student added successfully.', 'success');
+            // reloadContent('/api/addOccupiying', 'occupying-info');
+        }
+    });
 }
 
-document.getElementById('add-facilities-floor').addEventListener('click', displayAddFloorFasility);
+document.getElementById('add-facilities-floor').addEventListener('click', displayAddFloorFacility);
 
 document.getElementById('add-occupying').addEventListener('click', displayAddStudentOccupying);
 
@@ -476,14 +577,13 @@ function deleteMapStudent(event){
     }).then((result) => {
         if (result.isConfirmed) {
             // Make a DELETE request to your server to delete the student by facilityId
-            fetch(uri_api + `/api/deleteBuildingFacilities`, {
+            fetch(uri_api + `/api/deleteOccupiying`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    // buildingFacilitiesId: facilities[facilityId].buildingFacilitiesId,
-                    // buildingId: buildingId,
+                    roomId: roomId,
                 }),
             })
             .then(function(response) {
@@ -497,7 +597,7 @@ function deleteMapStudent(event){
                 event.target.closest('tr').remove(); // Remove the row from the table
                 console.log('Student deleted:', data);
                 Swal.fire('Deleted!', 'The student has been deleted.', 'success');
-                reloadWebsite();
+                // reloadContent('/api/deleteOccupiying', 'occupying-info');
             })
             .catch(function(error) {
                 // Handle errors here
@@ -524,14 +624,14 @@ function deleteMapFacility(event){
     }).then((result) => {
         if (result.isConfirmed) {
             // Make a DELETE request to your server to delete the facility by facilityId
-            fetch(uri_api + `/api/deleteBuildingFacilities`, {
+            fetch(uri_api + `/api/deletefloorFacilities`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    // buildingFacilitiesId: facilities[facilityId].buildingFacilitiesId,
-                    // buildingId: buildingId,
+                    floorId: floorId,
+                    floorFacilitiesId: floorFacilitiesId,
                 }),
             })
             .then(function(response) {
@@ -545,7 +645,7 @@ function deleteMapFacility(event){
                 event.target.closest('tr').remove(); // Remove the row from the table
                 console.log('Facility deleted:', data);
                 Swal.fire('Deleted!', 'The facility has been deleted.', 'success');
-                reloadWebsite();
+                // reloadContent('/api/deletefloorFacilities', 'add-facilities-floor');
             })
             .catch(function(error) {
                 // Handle errors here
