@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursor Coordinates</title>
+    <link rel="stylesheet" href="coordinates.css">
+</head>
+<body>
+<div class="container">
+    <div class="aspect-ratio">
+        <img src="library/map/campus-map-shuyuan.png" usemap="#housemap" alt="Background Image"
+             id="background-image">
+        <!--<map name="housemap">
+            <area shape="circle" coords="82,126,30" href="1.htm" alt="1">
+            <area shape="circle" coords="190,58,30" href="2.htm" alt="2">
+            <area shape="circle" coords="90,58,30" href="3.htm" alt="3">
+            <area shape="circle" coords="90,58,30" href="4.htm" alt="4">
+        </map>-->
+    </div>
+    <div id="marked-points"></div>
+    <div class="coordinates" id="coordinates"></div>
+    <div class="form-popup" id="popup">
+        <form id="point-form">
+            <h2>Enter Point Information</h2>
+            <label for="point-name">Point Name:</label>
+            <input type="text" id="point-name" required>
+            <label for="building-name">Building Name:</label>
+            <input type="text" id="building-name" required>
+            <label for="college-name">College Name:</label>
+            <input type="text" id="college-name" required>
+            <label for="total-floor">Total Floor:</label>
+            <input type="text" id="total-floor" required>
+
+            <label for="building-description">Building Description:</label>
+            <textarea id="building-description" rows="4" required></textarea>
+            <input type="submit" value="Add Point">
+            <input type="button" value="Cancel" id="close-form-button">
+        </form>
+    </div>
+</div>
+<script src="coordinates.js"></script>
+</body>
+</html>
