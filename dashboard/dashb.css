@@ -5,7 +5,7 @@ html, body {
     overflow: auto; /* Enable scrolling */
 }
 body {
-    background-image: url('library/map/campus-map.png'); /* Replace with your map image */
+    background-image: url('library/map/campus-map-16-9.png'); /* Replace with your map image */
     background-size: cover;
     background-repeat: no-repeat;
     /*background-attachment: fixed;*/

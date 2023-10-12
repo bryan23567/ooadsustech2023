@@ -1,35 +1,61 @@
-const backgroundImage = document.getElementById('background-image');
+const backgroundImage = document.getElementById('campus-map');
+// Create an image map for clickable areas
+const campusMap = document.getElementById('campus-map');
+campusMap.useMap = '#housemap';
+// Define the map
+const map = document.createElement('map');
+map.name = 'housemap';
+
 const markedPointsContainer = document.getElementById('marked-points-container');
 const popup = document.getElementById('popup');
 const pointForm = document.getElementById('point-form');
 const coordinates = document.getElementById('coordinates');
-let x, y, imageX, imageY; // Declare x and y variables
+let zoomLevel, rect,mouseX, mouseY, x,y,imageX, imageY; // Declare x and y variables
 const markedPointsInfo = [];
-
+function getPageZoomLevel() {
+    // Create a reference element with a known size (e.g., 1358x1921 pixels)
+    const referenceElement = document.createElement('div');
+    referenceElement.style.width = '100px';
+    referenceElement.style.height = '100px';
+    referenceElement.style.position = 'fixed';
+    referenceElement.style.top = '-1000px'; // Move the element out of the viewport
+    document.body.appendChild(referenceElement);
+    
+    // Measure the size of the reference element
+    const actualWidth = referenceElement.offsetWidth;
+    
+    // Calculate the zoom level
+    const zoomLevel = actualWidth / 100; // Assuming the expected size is 100px
+    
+    // Remove the reference element
+    referenceElement.remove();
+    
+    return zoomLevel;
+}
 // Add an event listener for mousemove to display coordinates
 backgroundImage.addEventListener('mousemove', (m) => {
-    x = m.clientX;
-    y = m.clientY;
+    rect = backgroundImage.getBoundingClientRect()
+    mouseX = m.clientX - rect.left;
+    mouseY = m.clientY - rect.top;
     
-    // Calculate image coordinates
-    imageX = (x / window.innerWidth) * 100;
-    imageY = (y / window.innerHeight) * 100;
-
-    // Update and display the coordinates
-    coordinates.innerText = `X: ${x}, Y: ${y} | Image X: ${imageX.toFixed(2)}%, Image Y: ${imageY.toFixed(2)}%`;
-
-    /* Position the coordinates display near the cursor
-    coordinates.style.left = x + 'px';
-    coordinates.style.top = y + 'px';*/
+    if (mouseX >= 0 && mouseX <= rect.width && mouseY >= 0 && mouseY <= rect.height) {
+        
+    // Cursor is inside the image
+        coordinates.innerText = `X: ${mouseX.toFixed(2)}, Y: ${mouseY.toFixed(2)}`;
+    } else {
+        // Cursor is outside the image
+        coordinates.innerText = '';
+    }
 });
 
 // Add an event listener for click to show the form
 backgroundImage.addEventListener('click', (c) => {
     console.log('Clicked on background image'); // Debugging line
-
-    //x = c.clientX; // Store x and y coordinates
-    //y = c.clientY;
-
+    zoomLevel = getPageZoomLevel();
+    x=mouseX.toFixed(2);
+    y=mouseY.toFixed(2);
+    imageX=x/zoomLevel;
+    imageY=y/zoomLevel;
     // Show the form at the clicked coordinates
     popup.style.display = 'block';
 
@@ -39,8 +65,9 @@ backgroundImage.addEventListener('click', (c) => {
 
 // Add an event listener for form submission
 pointForm.addEventListener('submit', (s) => {
+    rect = backgroundImage.getBoundingClientRect()
     s.preventDefault();
-
+    
     // Get user input from the form
     const pointname = document.getElementById('point-name').value;
     const buildingname = document.getElementById('building-name').value;
@@ -60,17 +87,19 @@ pointForm.addEventListener('submit', (s) => {
         totalfloor,
         description,
     };
-
     // Add the marked point information to the array
     markedPointsInfo.push(markedPointInfo);
-
+    //xWeb =
     // Create a clickable marked point on the image
-    const markedPoint = document.createElement('a');
+    const markedPoint = document.createElement('area');
     markedPoint.className = 'marked-point';
-    markedPoint.style.left = x + 'px';
-    markedPoint.style.top = y + 'px';
+    markedPoint.style.left = `${imageX}px`;//x + 'px';
+    markedPoint.style.top = `${imageY}px`;//y + 'px';
+    markedPoint.shape='rect';
+    markedPoint.coords = `${imageX},${imageY},30,30`; // x, y, width, height
+    markedPoint.alt = buildingnumber;
     markedPoint.href = buildingnumber + '.html'; // Set the href to the desired page
-
+    
     // Attach additional data to the marked point (e.g., name, description)
     markedPoint.dataset.buildingNumber = buildingnumber;
     markedPoint.dataset.pointname = pointname;
@@ -86,27 +115,6 @@ pointForm.addEventListener('submit', (s) => {
 
     // Append the marked point to the container
     markedPointsContainer.appendChild(markedPoint);
-/*
-    // Create a button representing the marked point
-    const markedPointButton = document.createElement('button');
-    markedPointButton.innerText = pointname;
-
-    // Add a click event listener to the button to display the information
-    markedPointButton.addEventListener('click', () => {
-        const infoString = `
-            Point Name: ${pointname}
-            Building Name: ${buildingname}
-            Building Number: ${buildingnumber}
-            College Name: ${collegename}
-            Total Floor: ${totalfloor}
-            Description: ${description}
-        `;
-        alert(infoString);
-    });
-
-    // Append the button to the marked points container
-    markedPointsContainer.appendChild(markedPointButton);
-*/
     // Hide the form
     popup.style.display = 'none';
 
