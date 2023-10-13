@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="coordinates.css">
 </head>
 <body>
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <p>Loading...</p>
+    </div>
+
 <div class="container">
     <div class="aspect-ratio">
         <img src="library/map/campus-map.png" alt="Campus Map" id="campus-map">
@@ -42,6 +47,6 @@
         </form>
     </div>
 </div>
-<script src="coordinates.js"></script>
+<script src="coordinates.js" type="module" defer></script>
 </body>
 </html>

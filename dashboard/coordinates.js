@@ -1,3 +1,10 @@
+
+import { uri_api } from "../global.js";
+
+console.log('Coordinates!')
+const apiUrl = uri_api + '/api/getAllBuilding';
+
+
 const backgroundImage = document.getElementById('campus-map');
 // Create an image map for clickable areas
 const campusMap = document.getElementById('campus-map');
@@ -12,6 +19,80 @@ const pointForm = document.getElementById('point-form');
 const coordinates = document.getElementById('coordinates');
 let zoomLevel, rect,mouseX, mouseY, x,y,imageX, imageY; // Declare x and y variables
 const markedPointsInfo = [];
+
+showLoadingScreen();
+
+let buildings;
+
+// Define the headers for the request
+const headers = new Headers({
+    'Content-Type': 'application/json',
+});
+
+// Create the request object
+const getRequest = new Request(apiUrl, {
+    method: 'GET',
+    headers: headers,
+});
+
+// Make the API request using the Fetch API
+fetch(getRequest)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parse the response JSON
+    })
+    .then(data => {
+        // Print the response body
+        hideLoadingScreen();
+
+        console.log('Response Body For Coordinates:', data);
+
+        buildings = data.buildings;
+
+        /* 
+        buildingCoordinateX: 427
+        buildingCoordinateY: 942
+        buildingId: "6cf4a19e-d547-4e00-b2b2-cb44e1cd3123"
+        collageId: "af8c6f5f-216a-4d23-bc7f-f1a47de6a017"
+        createdAt: "2023-09-23T09:45:52.389Z"
+        location: "Hanoi City"
+        name: "Building 1"
+        pictureId: "edd2a302-6182-4bdd-819e-6d495c924a46" 
+        */
+
+        console.log(buildings);
+
+        // Print the status code
+        console.log('Status Code:', data.status);
+    })
+    .catch(error => {
+
+        hideLoadingScreen();
+        // Handle errors here
+
+        alert("Please Contact Anthony Bryan for further support!");
+        console.error('There was a problem with the fetch operation:', error);
+    });
+
+
+// 
+
+
+// Function to show the loading screen
+function showLoadingScreen() {
+    const loadingScreen = document.getElementById('loading-screen');
+    loadingScreen.style.display = 'block';
+}
+
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loading-screen');
+    loadingScreen.style.display = 'none';
+}
+
+
+
 function getPageZoomLevel() {
     // Create a reference element with a known size (e.g., 1358x1921 pixels)
     const referenceElement = document.createElement('div');
@@ -128,3 +209,7 @@ closeFormButton.addEventListener('click', () => {
     // Hide the form
     popup.style.display = 'none';
 });
+
+function displayCoordinates(building){
+    var housemap = document.getElementsByName("housemap")
+}
