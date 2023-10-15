@@ -9,8 +9,8 @@
         <div class ="container">
             <div class="main">
                 <div class="topbar">
-                    <a href=""> Logout</a>
-                    <a href="">Home</a>
+                    <a href="https://www.w3schools.com/colors/colors_gradient.asp"> Logout</a>
+                    <a href="https://www.w3schools.com/css/css_colors.asp">Home</a>
                 </div>
                 <div class="row">
                     <div class="col-md-4 mt-1">
@@ -19,10 +19,10 @@
                                 <img id="profile-picture" src="src/image.jpg" class="rounded-circle" width="150" alt="rofile Picture">
                                 <input type="file" id="file-input" accept=".jpg, .jpeg, .png" >
                                 <div class="mt-3">
-                                    <h3>Sreyny THA</h3>
-                                    <a href=""> 12112670 </a>
-                                    <a href=""> Junior </a>
-                                    <a href=""> Shuren College </a>
+                                    <h3 id="fullname-bar">Sreyny THA</h3>
+                                    <a href="" id="studentid-bar"> 12112670 </a>
+                                    <a href="" id="grade-bar"> Junior </a>
+                                    <a href="" id="residential-bar> Shuren College "> Shuden College</a>
                                 </div>
                             </div>
                         </div>
@@ -32,20 +32,20 @@
                             <h1 class="m-3 pt-3">About </h1>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3"> 
                                         <h5>Full Name</h5>
                                     </div>
-                                    <div class="col-md-9 text-secondary">
+                                    <div class="col-md-9 text-secondary" id="fullname-about">
                                         Sreyny THA
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <h5> Age</h5>
+                                        <h5> Date of Birth</h5>
                                     </div>
-                                    <div class="col-md-9 text-secondary">
-                                        19
+                                    <div class="col-md-9 text-secondary" id="birth-about">
+                                        2003/10/12
                                     </div>
                                 </div>
                                 <hr>
@@ -53,7 +53,7 @@
                                     <div class="col-md-3">
                                         <h5>Grade</h5>
                                     </div>
-                                    <div class="col-md-9 text-secondary">
+                                    <div class="col-md-9 text-secondary" id="grade-about">
                                         Junior
                                     </div>
                                 </div>
@@ -62,7 +62,7 @@
                                     <div class="col-md-3">
                                         <h5> Student ID </h5>
                                     </div>
-                                    <div class="col-md-9 text-secondary">
+                                    <div class="col-md-9 text-secondary" id="studentid-about">
                                        12113053
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
                                     <div class="col-md-3">
                                         <h5> Preference </h5>
                                     </div>
-                                    <div class="col-md-9 text-secondary">
+                                    <div class="col-md-9 text-secondary" id="preference-about">
                                         Tennis
                                     </div>
                                 </div>
@@ -80,7 +80,7 @@
                                     <div class="col-md-3">
                                         <h5> Residential College</h5>
                                     </div>
-                                    <div class="col-md-9 text-secondary">
+                                    <div class="col-md-9 text-secondary" id="residential-about">
                                         Shuren College
                                     </div>
                                 </div>
@@ -101,27 +101,27 @@
                 <h2>Update Information</h2>
                 <div class="form-element">
                     <label for="fullname">Full Name</label>
-                    <input type="text" id="full-name" , placeholder="Enter Fullname">
+                    <input type="text" id="fullname-update" , placeholder="Enter Full Name">
                 </div>
                 <div class="form-element">
                     <label for="date-of-birth">Date of birth</label>
-                    <input type="date" id="date-of-birth" , placeholder="Enter date of birth">
+                    <input type="date" id="birth-update" , placeholder="Enter date of birth">
                 </div>
                 <div class="form-element">
                     <label for="grade">Grade</label>
-                    <input type="text" id="grade" , placeholder="Enter grade">
+                    <input type="text" id="grade-update" , placeholder="Enter grade">
                 </div>
                 <div class="form-element">
                     <label for="student-id">Student ID</label>
-                    <input type="number" id="student-id" , placeholder="Enter Student ID">
+                    <input type="number" id="studentid-update" , placeholder="Enter Student ID">
                 </div>
                 <div class="form-element">
                     <label for="Preference">Preference</label>
-                    <input type="text" id="preference" , placeholder="Enter Preference">
+                    <input type="text" id="preference-update" , placeholder="Enter Preference">
                 </div>
                 <div class="form-element">
                     <label for="review">residential college</label>
-                    <input type="text" id="residential-college" , placeholder="Enter Residential College">
+                    <input type="text" id="residential-update" , placeholder="Enter Residential College">
                 </div>
                 <div class="form-element">
                     <button>Submit</button>

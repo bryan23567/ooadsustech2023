@@ -1,5 +1,5 @@
 
-
+//make pop up update info button
 const btnUpdateInfo = document.querySelector("#showupdate");
 const btnClose = document.querySelector(".close-btn");
 const bgPopUp = document.querySelector(".bg-pop-up");
@@ -29,7 +29,6 @@ fileInput.addEventListener('change', function () {
         reader.onload = function (e) {
             profilePicture.src = e.target.result;
         };
-
         reader.readAsDataURL(file);
     }
 });
