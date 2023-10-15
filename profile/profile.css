@@ -4,10 +4,10 @@ body{
 	background: linear-gradient(to right, #ffccff 33%, #99ccff 100%);*/
 
 
-    background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),('src/sustechCampus.jpg'); /* Replace 'background.jpg' with your image file path */
-    background-attachment: fixed;
-    background-position: center;
-    background-size: cover;
+    background-image:linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('src/sustechCampus.jpg'); /* Replace 'background.jpg' with your image file path */
+     background-attachment: fixed;
+ background-position: center;
+ background-size: cover;
 }
   .main{
       padding:10px;
