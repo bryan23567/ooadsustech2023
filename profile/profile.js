@@ -16,3 +16,20 @@ function closePopUp() {
   document.querySelector(".popup").classList.remove("active");
   bgPopUp.style.display = "none";
 }
+
+//upload profile
+const profilePicture = document.getElementById('profile-picture');
+const fileInput = document.getElementById('file-input');
+
+fileInput.addEventListener('change', function () {
+    const file = fileInput.files[0];
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            profilePicture.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
