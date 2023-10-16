@@ -6,6 +6,10 @@
         <link rel="Stylesheet" href="profile.css">
     </head>
     <body>
+        <div id="loading-screen">
+            <div class="loader"></div>
+            <p>Loading...</p>
+        </div>
         <div class ="container">
             <div class="main">
                 <div class="topbar">
@@ -16,12 +20,13 @@
                     <div class="col-md-4 mt-1">
                         <div class ="card text-center sidebar">
                             <div class="card-body"> 
-                                <img src="src/image.jpg" class="rounded-circle" width="150">
+                                <img id="profile-picture" src="src/image.jpg" class="rounded-circle" width="150" alt="rofile Picture">
+                                <input type="file" id="file-input" accept=".jpg, .jpeg, .png" >
                                 <div class="mt-3">
-                                    <h3>Zhang Qunzhun</h3>
-                                    <a href=""> 12112670 </a>
-                                    <a href=""> Junior </a>
-                                    <a href=""> Shuren College </a>
+                                    <h3 id="fullname-bar"></h3>
+                                    <h3 id="studentid-bar"></h3>
+                                    <h3 id="grade-bar"></h3>
+                                    <h3 id="residential-bar"></h3>
                                 </div>
                             </div>
                         </div>
@@ -31,20 +36,29 @@
                             <h1 class="m-3 pt-3">About </h1>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3"> 
                                         <h5>Full Name</h5>
                                     </div>
-                                    <div class="col-md-9 text-secondary">
-                                        Sreyny THA
+                                    <div class="col-md-9 text-secondary" id="fullname-about">
+                                        <!-- Sreyny THA -->
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <h5> Age</h5>
+                                        <h5> Date of Birth</h5>
                                     </div>
-                                    <div class="col-md-9 text-secondary">
-                                        19
+                                    <div class="col-md-9 text-secondary" id="birth-about">
+                                        <!-- 2003/10/12 -->
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h5>Age</h5>
+                                    </div>
+                                    <div class="col-md-9 text-secondary" id="age-about">
+                                        <!-- 2003/10/12 -->
                                     </div>
                                 </div>
                                 <hr>
@@ -52,17 +66,26 @@
                                     <div class="col-md-3">
                                         <h5>Grade</h5>
                                     </div>
-                                    <div class="col-md-9 text-secondary">
-                                        Bachelor
+                                    <div class="col-md-9 text-secondary" id="grade-about">
+                                        <!-- Junior -->
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <h5> Hobby </h5>
+                                        <h5>Gender</h5>
                                     </div>
-                                    <div class="col-md-9 text-secondary">
-                                        code, sleep
+                                    <div class="col-md-9 text-secondary" id="gender-about">
+                                        <!-- Junior -->
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h5> Student ID </h5>
+                                    </div>
+                                    <div class="col-md-9 text-secondary" id="studentid-about">
+                                       <!-- 12113053 -->
                                     </div>
                                 </div>
                                 <hr>
@@ -70,17 +93,17 @@
                                     <div class="col-md-3">
                                         <h5> Preference </h5>
                                     </div>
-                                    <div class="col-md-9 text-secondary">
-                                        Tennis
+                                    <div class="col-md-9 text-secondary" id="preference-about">
+                                        <!-- Tennis -->
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <h5> Review From Roommate </h5>
+                                        <h5> Residential College</h5>
                                     </div>
-                                    <div class="col-md-9 text-secondary">
-                                        9/10
+                                    <div class="col-md-9 text-secondary" id="residential-about">
+                                        <!-- Shuren College -->
                                     </div>
                                 </div>
                             </div>
@@ -100,27 +123,31 @@
                 <h2>Update Information</h2>
                 <div class="form-element">
                     <label for="fullname">Full Name</label>
-                    <input type="text" id="fullname" , placeholder="Enter Fullname">
+                    <input type="text" id="fullname-update" , placeholder="Enter Fullname">
                 </div>
                 <div class="form-element">
-                    <label for="age">Age</label>
-                    <input type="text" id="age" , placeholder="Enter age">
+                    <label for="date-of-birth">Date of birth</label>
+                    <input type="date" id="birth-update" , placeholder="Enter date of birth">
                 </div>
                 <div class="form-element">
-                    <label for="age">Grade</label>
-                    <input type="text" id="grade" , placeholder="Enter grade">
+                    <label for="grade">Grade</label>
+                    <input type="text" id="grade-update" , placeholder="Enter grade">
                 </div>
                 <div class="form-element">
-                    <label for="hobby">Hobby</label>
-                    <input type="text" id="hobby" , placeholder="Enter hobby">
+                    <label for="gender">Gender</label>
+                    <input type="text" id="gender-update" , placeholder="Enter grade">
+                </div>
+                <div class="form-element">
+                    <label for="student-id">Student ID</label>
+                    <input type="number" id="studentid-update" , placeholder="Enter Student ID">
                 </div>
                 <div class="form-element">
                     <label for="Preference">Preference</label>
-                    <input type="text" id="Preference" , placeholder="Enter Preference">
+                    <input type="text" id="preference-update" , placeholder="Enter Preference">
                 </div>
                 <div class="form-element">
-                    <label for="review">Review from roommate</label>
-                    <input type="text" id="review" , placeholder="Enter score">
+                    <label for="review">residential college</label>
+                    <input type="text" id="residential-update" , placeholder="Enter Residential College">
                 </div>
                 <div class="form-element">
                     <button>Submit</button>
@@ -128,5 +155,6 @@
             </div>
         </div>
     </body>
-    <script src="profile.js"></script>
+    <script src="profile.js" type="module" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>

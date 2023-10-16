@@ -2,14 +2,25 @@
 // ------------------------------------------------------------------------------------------------------
 import { uri_api } from "../global.js";
 
+const queryParams = new URLSearchParams(window.location.search);
+const buildingID = queryParams.get("buildingId");
+
 console.log('hellos')
-const apiUrl = uri_api + '/api/building/6cf4a19e-d547-4e00-b2b2-cb44e1cd3123';
+const apiUrl = uri_api + '/api/building/' + buildingID;
 
 showLoadingScreen();
 var buildingId;
 var pictureId;
 var facilities;
 var plan;
+
+// Find the "Map" link by its ID
+const mapLink = document.getElementById('map-link');
+
+// Set the href attribute to the dynamic URL
+mapLink.href = `../Rooms/map.html?buildingId=` + buildingID; 
+
+
 // Define the headers for the request
 const headers = new Headers({
     'Content-Type': 'application/json',

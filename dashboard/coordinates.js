@@ -51,6 +51,8 @@ fetch(getRequest)
 
         buildings = data.buildings;
 
+        displayBuilding(buildings);
+
         /* 
         buildingCoordinateX: 427
         buildingCoordinateY: 942
@@ -137,11 +139,100 @@ backgroundImage.addEventListener('click', (c) => {
     y=mouseY.toFixed(2);
     imageX=x/zoomLevel;
     imageY=y/zoomLevel;
-    // Show the form at the clicked coordinates
-    popup.style.display = 'block';
+    // // Show the form at the clicked coordinates
+    // popup.style.display = 'block';
 
-    // Pre-fill the coordinates in the form
-    document.getElementById('point-name').value = `X: ${x}, Y: ${y}`;
+    // // Pre-fill the coordinates in the form
+    // document.getElementById('point-name').value = `X: ${x}, Y: ${y}`;
+
+    Swal.fire({
+        title: 'Add New Building',
+        html: `
+        <form id="point-form">
+            <h2>Enter Point Information</h2>
+            <label for="point-name">Point Name: X = ${x}, Y = ${y}</label>
+            <id="point-name" required>
+            <br>
+            <label for="building-name">Building Name:</label>
+            <input type="text" id="building-name" required>
+            <br>
+            <!--<label for="building-number">Building Number:</label>
+            <input type="text" id="building-number" required>
+            <label for="total-floor">Total Floor:</label>
+            <input type="text" id="total-floor" required>-->
+            <br>
+            <label for="college-name">College Name:</label>
+            <select id="collegeSelect" name="college" required>
+                <option value=1>Zhiren</option>
+                <option value=2>Zhicheng</option>
+                <option value=3>Shuren</option>
+                <option value=4>Shude</option>
+                <option value=5>Zhixin</option>
+                <option value=6>Shuli</option>
+            <!-- Add more options as needed -->
+            </select>
+            <br>
+            <label for="building-description">Building Description:</label>
+            <textarea id="building-description" rows="4" required></textarea>
+        </form>
+        `,
+
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        showConfirmButton: true,
+        preConfirm: () => {
+            
+            const buildingName = document.getElementById('building-name').value;
+            const buildingDescription = document.getElementById('building-description').value;
+            const collegename = document.getElementById('collegeSelect').value;
+
+            // You can perform input validation here if needed
+
+            // Create an object with the form data
+            const formData = {
+                name: buildingName,
+                collageId: collegename,
+                buildingCoordinateX: x,
+                buildingCoordinateY: y,
+                buildingDescription: buildingDescription,
+            };
+
+            // Make a POST request to your server
+            return fetch(uri_api + '/api/addNewBuilding', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Parse the response JSON if needed
+                })
+                .then((data) => {
+                    // Handle the response from the server as needed
+                    console.log('Response:', data);
+
+                    // Optionally, you can perform additional actions after a successful POST request
+                    return data; // This will close the SweetAlert2 modal
+                })
+                .catch((error) => {
+                    // Handle errors here
+                    console.error('There was a problem with the fetch operation:', error);
+                    Swal.showValidationMessage('An error occurred. Please try again.');
+                });
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire('Success!', 'Building added successfully.', 'success');
+            reloadWebsite();
+        }
+    });
+
+
 });
 
 // Add an event listener for form submission
@@ -177,10 +268,10 @@ pointForm.addEventListener('submit', (s) => {
     markedPoint.style.left = `${imageX}px`;//x + 'px';
     markedPoint.style.top = `${imageY}px`;//y + 'px';
     markedPoint.shape='rect';
-    markedPoint.coords = `${imageX},${imageY},30,30`; // x, y, width, height
+    markedPoint.coords = `${imageX},${imageY}`; // x, y, width, height
     markedPoint.alt = buildingnumber;
-    markedPoint.href = buildingnumber + '.html'; // Set the href to the desired page
     
+    markedPoint.href = `../Rooms/details.html?buildingId=` + building.buildingId; // Set the href to the desired page
     // Attach additional data to the marked point (e.g., name, description)
     markedPoint.dataset.buildingNumber = buildingnumber;
     markedPoint.dataset.pointname = pointname;
@@ -211,5 +302,85 @@ closeFormButton.addEventListener('click', () => {
 });
 
 function displayCoordinates(building){
-    var housemap = document.getElementsByName("housemap")
+    
+}
+
+
+
+function deletePoint(event){
+    const building = event.target.getAttribute('marked-points-container');
+    console.log(studentId);
+
+    Swal.fire({
+        title: 'Delete Building',
+        text: 'Are you sure you want to delete this building?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Delete'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Make a DELETE request to your server to delete the student by facilityId
+            fetch(uri_api + `/api/deleteBuilding`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    roomId: roomId,
+                }),
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Optionally, parse the response JSON if needed
+            })
+            .then(function(data) {
+                // Handle the successful deletion on the client-side
+                event.target.closest('tr').remove(); // Remove the row from the table
+                console.log('Building deleted:', data);
+                Swal.fire('Deleted!', 'The building has been deleted.', 'success');
+                // reloadContent('/api/deleteOccupiying', 'occupying-info');
+            })
+            .catch(function(error) {
+                // Handle errors here
+                console.error('There was a problem with the fetch operation:', error);
+                Swal.fire('Error', 'An error occurred while deleting the building.', 'error');
+            });
+        }
+    });
+    
+}
+
+function editPoint(event){
+
+}
+
+function displayBuilding(buildings) {
+    console.log("DIsplaying Building");
+    // Get the <map> element by its name
+    const mapElement = document.querySelector('map[name="housemap"]');
+    zoomLevel = getPageZoomLevel();
+    
+    // Loop through the buildings array and create an <area> element for each building
+    buildings.forEach((building, index) => {
+        console.log(building);
+        // Create a new <area> element
+        const areaElement = document.createElement('area');
+        
+        // Set the shape, coordinates, and other attributes for the <area> element
+        areaElement.shape = 'rect'; // You can adjust the shape as needed
+        areaElement.coords = `${building.buildingCoordinateX},${building.buildingCoordinateY}`; // Use building properties for X, Y, and radius
+        areaElement.href = `../Rooms/details.html?buildingId=` + building.buildingId; // Assuming the href follows the pattern
+        areaElement.alt = building.name; // Use building name or other identifier
+        areaElement.className = 'marked-point';
+        areaElement.style.left = `${building.buildingCoordinateX/zoomLevel}px`;//x + 'px';
+        areaElement.style.top = `${building.buildingCoordinateY/zoomLevel}px`;//y + 'px';
+        areaElement.buildingId = building.buildingId;
+        console.log(areaElement)
+        // Append the <area> element to the <map>
+        mapElement.appendChild(areaElement);
+    });
 }

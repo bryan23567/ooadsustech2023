@@ -1,9 +1,10 @@
 // API codes
 
 import { uri_api } from "../global.js";
-
+const queryParams = new URLSearchParams(window.location.search);
+const buildingID = queryParams.get("buildingId");
 console.log('Scriptroom!')
-const apiUrl = uri_api + '/api/mapBuilding/6cf4a19e-d547-4e00-b2b2-cb44e1cd3123';
+const apiUrl = uri_api + '/api/mapBuilding/' + buildingID;
 
 showLoadingScreen();
 
@@ -50,8 +51,9 @@ fetch(getRequest)
 
         displayBuildingName(data.name);
         displayFloorNumbers(data.floors);
-        displayFloorFacilities(data.floors[0].floorFacilities);
 
+        
+        // displayFloorFacilities(data.floors[0].floorFacilities);
 
         // Print the status code
         console.log('Status Code:', data.status);
@@ -306,9 +308,15 @@ function displayOccupyingRoom(roomName, arrayStudentOccupying) {
     });
 }
 
+function displayFloor(floors){ 
+    for(var i = 0; i < floors.length; i++){
+        console.log(floors[i]);
+        displayFloorFacilities(floors[i]);
+    }
+}
+
 
 function displayFloorFacilities(arrayFacilitiesFloor) {
-
     console.log("Displaying Floor Facility!");
     console.log(arrayFacilitiesFloor);
     var tableBody = document.querySelector('.table-floor');
