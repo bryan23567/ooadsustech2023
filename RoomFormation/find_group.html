@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Find Group</title>
+    <link rel="stylesheet" href="room_formation_style.css">
+    <script src="find_group_action.js" type="module" defer></script>
+    <!-- <script src="/global.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+
+    <!-- <div id="loading-screen">
+        <div class="loader"></div>
+        <p>Loading...</p>
+    </div> -->
+
+    <header>
+        <nav>
+            <h1 id="title-page">Room Formation</h1>
+            <a href="find_roomate.html">Find Roomates</a>
+            <a href="find_group.html" class="active">Find Group</a>
+        </nav>
+    </header>
+
+    <main>
+        <div>
+            <div class="group-container">
+                
+                <div class="no-group-yet">
+                    <h2 id="have-no-group">You don't have group yet!</h2>
+                    <button id="create-group">Create a Group</button>
+                </div>
+                
+                <!--
+                <div class="my-created-group">
+                    <h2> My Group</h2>
+                    <h5>Building: 5, Floor: 6, Room: 601</h5>
+                    <h5>quadraple</h5>
+                    <h6>Members: student_1, student_2</h6>
+                    <h5>Available: 2</h5>
+                    <h5>status: in searching</h5>
+                    <button id="invite-button">invite students</button>
+                    <button id="delete-group">delete group</button>   
+                </div>
+                -->
+            </div>
+        </div>
+        <div class="find-group-container">
+            <h1>Find My Group</h1>
+            <table class="group-table">
+                <tr>
+                    <th>Men/Women</th>
+                    <th>Location</th>
+                    <th>Room type</th>
+                    <th>Occupants</th>
+                    <th>Available</th>
+                    <th>Operation</th>
+                </tr>
+                <tr>
+                    <td>Men</td>
+                    <td>Building: 2, Floor: 6, Room: 603</td>
+                    <td>quadraple</td>
+                    <td>student_1, student_2</td>
+                    <td>2</td>
+                    <td><button class="join-group-btn">join</button></td>
+
+                </tr>
+                <tr>
+                    <td>Men</td>
+                    <td>Building: 2, Floor: 6, Room: 603</td>
+                    <td>quadraple</td>
+                    <td>student_1, student_2</td>
+                    <td>2</td>
+                    <td><button class="join-group-btn">join</button></td>
+                </tr>
+            </table>
+        </div>
+    </main>
+    <footer>
+        <div class="foot-up">
+            <img src="sustech_bgremoved.png">
+        </div>
+        <div class="foot-down">
+            <p style="color: darkgrey;">
+                © 2023 All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+
+</body>
+</html>
