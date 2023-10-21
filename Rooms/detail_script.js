@@ -626,3 +626,44 @@ function displayEditLocation(){
     });
 }
 document.getElementById('edit-desc-button').addEventListener('click', displayEditLocation);
+
+function showSearchRoomForm(){
+    Swal.fire({
+        title: 'Search Room',
+        html: `<form id="search-my-desired-room">
+        <label for="search-name-building">Building:</label>
+        <select id="search-name-building" name="search-name-building" required>
+            <option value="1">Building 1</option>
+            <option value="2">Building 2</option>
+            <option value="3">Building 3</option>
+            <option value="4">Building 4</option>
+            <option value="5">Building 5</option>
+            <option value="6">Building 6</option>
+            <option value="7">Building 7</option>
+            <option value="8">Building 8</option>
+            <option value="9">Building 9</option>
+            <option value="10">Building 10</option>
+            <option value="11">Building 11</option>
+            <option value="12">Building 12</option>
+            <option value="13">Building 13</option>
+            <option value="14">Building 14</option>
+            <option value="15">Building 15</option>
+            <option value="16">Building 16</option>
+        </select>
+        <br><br>
+    
+        <label for="search-room-num">Room:</label>
+        <input type="text" id="search-room-num" name="search-room-num" required
+        </form>`,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: 'Search',
+        cancelButtonText: 'Cancel'
+    });
+
+    
+}
+
+document.getElementById('search-room').addEventListener('click', showSearchRoomForm);
+
