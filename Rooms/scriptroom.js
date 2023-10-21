@@ -193,6 +193,12 @@ function displayRoomBlocks(arrayRoomPerFloor) {
         roomName = parseInt(room.name, 10);
         roomId = room.roomId;
         roomType = room.type;
+        var available = 0;
+
+        if(room.occupied != null){
+            console.log("room occupied" + room.occupied.length);
+        }
+        
 
         // Get availability from your data
         if (roomType == 'single') {
@@ -205,12 +211,19 @@ function displayRoomBlocks(arrayRoomPerFloor) {
             len = 4;
         }
 
-    
+        //available = len - room.occupied.length;
+        if (room && room.occupied) {
+            available = len - room.occupied.length;
+        } else {
+            available = len;// Handle the case when room or room.occupied is not defined
+        }
+        
+
         console.log(room);
         console.log(roomName);
         console.log(roomId);
-        console.log(roomType);
-        
+        console.log(roomType);  
+    
         var isEven = roomName % 2 == 0; // Check if roomId is even
 
         // Create the room div element
@@ -663,6 +676,46 @@ function deleteMapFacility(event){
         }
     });
 }
+
+function showSearchRoomForm(){
+    Swal.fire({
+        title: 'Search Room',
+        html: `<form id="search-my-desired-room">
+        <label for="search-name-building">Building:</label>
+        <select id="search-name-building" name="search-name-building" required>
+            <option value="1">Building 1</option>
+            <option value="2">Building 2</option>
+            <option value="3">Building 3</option>
+            <option value="4">Building 4</option>
+            <option value="5">Building 5</option>
+            <option value="6">Building 6</option>
+            <option value="7">Building 7</option>
+            <option value="8">Building 8</option>
+            <option value="9">Building 9</option>
+            <option value="10">Building 10</option>
+            <option value="11">Building 11</option>
+            <option value="12">Building 12</option>
+            <option value="13">Building 13</option>
+            <option value="14">Building 14</option>
+            <option value="15">Building 15</option>
+            <option value="16">Building 16</option>
+        </select>
+        <br><br>
+    
+        <label for="search-room-num">Room:</label>
+        <input type="text" id="search-room-num" name="search-room-num" required
+        </form>`,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: 'Search',
+        cancelButtonText: 'Cancel'
+    });
+
+    
+}
+
+document.getElementById('search-room').addEventListener('click', showSearchRoomForm);
 
 
   
