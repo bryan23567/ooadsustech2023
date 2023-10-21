@@ -2,54 +2,90 @@
 import { uri_api } from "../global.js";
 const queryParams = new URLSearchParams(window.location.search);
 const SID = queryParams.get("sid");
+
 console.log('Profile!')
-const apiUrl = uri_api + '/api/userProfile/' + SID;
+const apiUrl = uri_api + '/api/userProfile/cbb10e07-89ee-4f15-b451-4ef706bd141d';
+const apiUrlColleges = uri_api + '/api/getAllColleges';
 
 showLoadingScreen();
+
+var uuid;
+var colleges;
+
 // Define the headers for the request
 const headers = new Headers({
   'Content-Type': 'application/json',
 });
 
-// Create the request object
+
+// Create the request objects
 const getRequest = new Request(apiUrl, {
   method: 'GET',
   headers: headers,
 });
 
-// Make the API request using the Fetch API
+// Make the first API request using the Fetch API
 fetch(getRequest)
   .then(response => {
-      if (!response.ok) {
-          throw new Error('Network response was not ok');
-      }
-      return response.json(); // Parse the response JSON
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json(); // Parse the response JSON
   })
   .then(data => {
-      // Print the response body
-      hideLoadingScreen();
+    // Print the response body
+    console.log('Response Body For Profile:', data);
+    
 
-      console.log('Response Body For Profile:', data);
+    uuid = data.uuid;
 
-      displayUserInformation(data);
+    console.log(uuid);
+    displayUserInformation(data);
+    displayProfilePicture(data.photo);
 
-      
-
-      if(data.picture != null){
-          displayBuildingPicture(data.picture);
-      }
-
-      // Print the status code
-      console.log('Status Code:', data.status);
+    // Print the status code
+    console.log('Status Code:', data.status);
   })
   .catch(error => {
-
-      hideLoadingScreen();
-      // Handle errors here
-
-      alert("Please Contact Anthony Bryan for further support!");
-      console.error('There was a problem with the fetch operation:', error);
+    // Handle errors here
+    alert('Please Contact Anthony Bryan for further support!');
+    console.error('There was a problem with the fetch operation:', error);
   });
+
+
+const getRequestColleges = new Request(apiUrlColleges, {
+  method: 'GET',
+  headers: headers,
+});
+
+// Make the second API request using the Fetch API
+fetch(getRequestColleges)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json(); // Parse the response JSON
+  })
+  .then(collage => {
+    // Print the response body
+    console.log('Response Body For Colleges:', collage);
+    colleges = collage;
+
+    console.log('Colleges: ', colleges);
+
+    // Print the status code
+    console.log('Status Code:', collage.status);
+  })
+  .catch(error => {
+    // Handle errors here
+    alert('Please Contact Anthony Bryan for further support!');
+    console.error('There was a problem with the fetch operation:', error);
+  })
+  .finally(() => {
+    // This will ensure that hideLoadingScreen is called regardless of success or error
+    hideLoadingScreen();
+  });
+
 
   // Function to show the loading screen
 function showLoadingScreen() {
@@ -65,24 +101,6 @@ function reloadWebsite() {
 function hideLoadingScreen() {
   const loadingScreen = document.getElementById('loading-screen');
   loadingScreen.style.display = 'none';
-}
-
-//make pop up update info button
-const btnUpdateInfo = document.querySelector("#showupdate");
-const btnClose = document.querySelector(".close-btn");
-const bgPopUp = document.querySelector(".bg-pop-up");
-
-btnUpdateInfo.addEventListener("click", showPopUp);
-btnClose.addEventListener("click", closePopUp);
-
-function showPopUp() {
-  document.querySelector(".popup").classList.add("active");
-  bgPopUp.style.display = "block";
-}
-
-function closePopUp() {
-  document.querySelector(".popup").classList.remove("active");
-  bgPopUp.style.display = "none";
 }
 
 
@@ -122,64 +140,174 @@ function displayUserInformation(user) {
 }
 
 function updateInformation() {
-  // Capture the updated data from HTML elements
-  const updatedName = document.getElementById('fullname-update').value;
-  const updatedSID = document.getElementById('studentid-update').value;
-  const updatedDateOfBirth = document.getElementById('birth-update').value;
-  const updatedGender = document.querySelector('gender-update').value;
-  const updatedPreferences = document.getElementById('preference-update').value;
-  const updatedGrade = document.getElementById('grade-update').value;
-  const updatedResidentalCollege = document.getElementById('residential-update').value;
+  Swal.fire({
+    title: 'Update Information',
+    html: `
+    <div class="form">
+        <div class="form-element">
+            <label for="fullname">Full Name</label>
+            <input type="text" id="fullname-update" placeholder="Enter Fullname">
+        </div>
+        <div class="form-element">
+            <label for="date-of-birth">Date of birth</label>
+            <input type="date" id="birth-update" placeholder="Enter date of birth">
+        </div>
+        <div class="form-element">
+            <label for="grade">Grade</label>
+            <input type="text" id="grade-update" placeholder="Enter grade">
+        </div>
+        <div class="form-element">
+            <label for="gender">Gender</label>
+            <input type="radio" id="male" name="gender-update" value=1>
+            <label for="male">Male</label>
+            <input type="radio" id="female" name="gender-update" value=0>
+            <label for="female">Female</label>
+        </div>
+        <div class="form-element">
+            <label for="student-id">Student ID</label>
+            <input type="text" id="sid-update" placeholder="Enter Student ID">
+        </div>
+        <div class="form-element">
+            <label for="preference">Preference</label>
+            <input type="text" id="preference-update" placeholder="Enter Preference">
+        </div>
+        <div class="form-element">
+            <label for="residential-college">Residential College</label>
+            <select id="residential-update">
+              
+            </select>
+        </div>
+    </div>
+    `,
+    didOpen: () => {
+      const collageName = document.getElementById('residential-update');
 
-  // Construct the data object to send in the POST request
-  const updatedUserData = {
-    name: updatedName,
-    sid: updatedSID,
-    dateOfBirth: updatedDateOfBirth,
-    gender: updatedGender,
-    preferences: updatedPreferences,
-    grade: updatedGrade,
-    residentalCollege: updatedResidentalCollege,
-  };
+      // Clear any existing options
+      collageName.innerHTML = '';
 
-  // Send a POST request to update the user's information
-  fetch(uri_api + '', {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
+      // Iterate through the 'colleges' array and create an option element for each college
+      colleges.forEach(college => {
+        const option = document.createElement('option');
+        option.value = college.collageId; // Set the 'value' attribute
+        option.text = college.name; // Set the text that will be displayed
+        collageName.appendChild(option); // Append the option to the select element
+      });
     },
-    body: JSON.stringify(updatedUserData),
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json(); // Parse the response JSON
-    })
-    .then(data => {
-      // Handle success, e.g., close the popup or show a success message
-      closePopUp(); // Close the popup after successful update
-    })
-    .catch(error => {
-      // Handle errors, e.g., display an error message to the user
-      console.error('There was a problem with the update operation:', error);
-    });
+    showCancelButton: true,
+    showConfirmButton: true,
+    confirmButtonText: 'Submit',
+    cancelButtonText: 'Cancel',
+    preConfirm: () => {
+      // Capture the updated data from the Swal dialog
+      const updatedName = document.getElementById('fullname-update').value;
+      const updatedDob = document.getElementById('birth-update').value;
+      const updatedGrade = document.getElementById('grade-update').value;
+      const updatedGender = document.querySelector('input[name="gender-update"]:checked').value;
+      const updatedSid = document.getElementById('sid-update').value;
+      const updatePreference = document.getElementById('preference-update').value;
+      const collageId = document.getElementById('residential-update').value;
+      
+      console.log(colleges);
+      
+
+      const formData = {
+        name: updatedName,
+        dateOfBirth: updatedDob,
+        grade: updatedGrade,
+        gender: updatedGender,
+        sid: updatedSid,
+        preferences: updatePreference,
+        collageId: collageId,
+      };
+
+      // Send a POST request to update the user's information
+      return fetch(uri_api + '/api/updateUserProfile/' + uuid, {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .catch(error => {
+          Swal.showValidationMessage(`Request failed: ${error.message}`);
+        });
+    },
+  }).then(result => {
+    if (result.isConfirmed) {
+      Swal.fire('Updated', 'Your information has been updated.', 'success');
+      reloadWebsite();
+    }
+  });
 }
 
+document.getElementById('showupdate').addEventListener('click', updateInformation);
 
 
-//upload profile
+
+
+//upload profile picture
 const profilePicture = document.getElementById('profile-picture');
 const fileInput = document.getElementById('file-input');
 
 fileInput.addEventListener('change', function () {
-    const file = fileInput.files[0];
-    if (file) {
+  Swal.fire({
+    title: 'Confirm Image Upload',
+    text: 'Are you sure you want to upload this image?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Upload',
+    cancelButtonText: 'Cancel',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const file = fileInput.files[0];
+      if (file) {
         const reader = new FileReader();
 
         reader.onload = function (e) {
-            profilePicture.src = e.target.result;
+          profilePicture.src = e.target.result;
+
+          // Send the image to the server using a POST request
+          const dataUrl = e.target.result;
+          const formData = new FormData();
+          formData.append('profileImage', dataUrl);
+
+          fetch(uri_api + '/api/updateUserProfilePhoto/' + SID, {
+            method: 'POST',
+            body: formData,
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              // Display a success message with Swal
+              Swal.fire({
+                icon: 'success',
+                title: 'Image uploaded successfully',
+              });
+            })
+            .catch(error => {
+              // Display an error message with Swal
+              Swal.fire({
+                icon: 'error',
+                title: 'Image upload failed',
+                text: error.message,
+              });
+              console.error('There was a problem uploading the image:', error);
+            });
         };
         reader.readAsDataURL(file);
+      }
     }
+  });
 });
+
+function displayProfilePicture(imageUrl) {
+  const profilePicture = document.getElementById('profile-picture');
+  profilePicture.src = imageUrl;
+}
