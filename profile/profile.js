@@ -11,7 +11,7 @@ showLoadingScreen();
 
 var uuid;
 var colleges;
-
+var sid;
 // Define the headers for the request
 const headers = new Headers({
   'Content-Type': 'application/json',
@@ -38,10 +38,13 @@ fetch(getRequest)
     
 
     uuid = data.uuid;
+    sid = data.sid;
 
     console.log(uuid);
+    console.log(SID);
     displayUserInformation(data);
     displayProfilePicture(data.photo);
+
 
     // Print the status code
     console.log('Status Code:', data.status);
@@ -119,7 +122,12 @@ function displayUserInformation(user) {
   
   nameAbout.textContent = user.name;
   sidAbout.textContent = user.sid;
-  dateOfBirthAbout.textContent = user.dateOfBirth;
+  // Format the dateOfBirth
+  const dateOfBirth = new Date(user.dateOfBirth);
+  const formattedDate = dateOfBirth.toISOString().split('T')[0];
+
+  dateOfBirthAbout.textContent = formattedDate;
+
   genderAbout.textContent = user.gender === 0 ? 'Female' : 'Male';
   preferencesAbout.textContent = user.preferences;
   gradeAbout.textContent = user.grade;
@@ -252,62 +260,124 @@ document.getElementById('showupdate').addEventListener('click', updateInformatio
 
 
 //upload profile picture
-const profilePicture = document.getElementById('profile-picture');
-const fileInput = document.getElementById('file-input');
 
-fileInput.addEventListener('change', function () {
+const profilePicture = document.getElementById('profile-picture');
+const fileInput = document.getElementById('upload-profile');
+
+
+
+function uploadProfilePic() {
   Swal.fire({
-    title: 'Confirm Image Upload',
-    text: 'Are you sure you want to upload this image?',
-    icon: 'question',
+    title: '<strong>Upload Profile Picture</strong>',
+    html: `
+      <form id="imageUploadForm" enctype="multipart/form-data">
+        <label for="imageInput">Select Picture:</label>
+        <input type="file" id="imageInput" name="image" accept="image/*">
+      </form>
+      <div id="selectedFiles"></div>
+    `,
+    showCloseButton: true,
     showCancelButton: true,
-    confirmButtonText: 'Upload',
-    cancelButtonText: 'Cancel',
+    focusConfirm: false,
+    showConfirmButton: true,
+    preConfirm: () => {
+      const selectedImage = document.getElementById('imageInput').files[0];
+
+      if (!selectedImage) {
+        // Handle the case where no image is selected
+        return Promise.reject('No image selected');
+      }
+
+      // Function to convert File to base64
+      function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = function () {
+            resolve(reader.result.split(',')[1]); // Extract base64 data
+          };
+          reader.onerror = function (error) {
+            reject(error);
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      return fileToBase64(selectedImage)
+        .then((base64Image) => {
+          // Create a JSON object containing your data with base64 image
+          const jsonData = {
+            photo: base64Image,
+          };
+
+          // Convert JSON object to a JSON string
+          const jsonString = JSON.stringify(jsonData);
+
+          // Make a POST request to send the JSON string to the backend
+          return fetch(uri_api + '/api/updateUserProfilePhoto/' + uuid, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: jsonString,
+          });
+        })
+        .then((response) => {
+          if (!response.ok) {
+            console.log(response.body);
+            throw new Error('Network response was not ok');
+          }
+          return response.json(); // Parse the response JSON if needed
+        })
+        .catch((error) => {
+          // Handle errors here
+          console.error('There was a problem with the fetch operation:', error);
+        });
+    },
   }).then((result) => {
     if (result.isConfirmed) {
-      const file = fileInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-          profilePicture.src = e.target.result;
-
-          // Send the image to the server using a POST request
-          const dataUrl = e.target.result;
-          const formData = new FormData();
-          formData.append('profileImage', dataUrl);
-
-          fetch(uri_api + '/api/updateUserProfilePhoto/' + SID, {
-            method: 'POST',
-            body: formData,
-          })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              // Display a success message with Swal
-              Swal.fire({
-                icon: 'success',
-                title: 'Image uploaded successfully',
-              });
-            })
-            .catch(error => {
-              // Display an error message with Swal
-              Swal.fire({
-                icon: 'error',
-                title: 'Image upload failed',
-                text: error.message,
-              });
-              console.error('There was a problem uploading the image:', error);
-            });
-        };
-        reader.readAsDataURL(file);
-      }
+      Swal.fire(
+        'Uploaded!',
+        'Your image has been uploaded.',
+        'success'
+      );
+      // reloadWebsite();
+    } else if (result.isDismissed) {
+      Swal.fire(
+        'Cancelled',
+        'You cancelled the upload.',
+        'info'
+      );
     }
   });
-});
+}
 
-function displayProfilePicture(imageUrl) {
-  const profilePicture = document.getElementById('profile-picture');
-  profilePicture.src = imageUrl;
+
+
+fileInput.addEventListener('click', uploadProfilePic);
+
+function displayProfilePicture(pictures) {
+  
+  const pictureData = pictures;
+  const imgElement = document.getElementById("profile-picture");
+
+  if (pictureData && pictureData.data) {
+      // Convert the byte array to a binary string
+      const byteArray = new Uint8Array(pictureData.data);
+      let binaryString = '';
+      byteArray.forEach(byte => {
+          binaryString += String.fromCharCode(byte);
+      });
+
+      const base64Data = btoa(binaryString);
+      const decodedData = atob(base64Data);
+      const dataUrl = `data:image/png;base64,${decodedData}`;
+
+      // Display the image using the HTML img element
+      imgElement.src = dataUrl;
+  } else {
+      // Handle the case where the picture data is empty or missing
+      imgElement.alt = 'Image not available';
+      imgElement.src = ''; // You can set a placeholder image or leave it empty
+  }
+
 }
