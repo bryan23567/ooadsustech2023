@@ -1,3 +1,5 @@
+
+// hidden the password
 function showPassword() {
     var passwordInput = document.getElementById('password');
     if (passwordInput.type === 'password') {
