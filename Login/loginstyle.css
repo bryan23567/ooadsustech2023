@@ -1,0 +1,85 @@
+body{
+    background-color: ghostwhite;
+}
+.box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; /* Set your desired width */
+    height: 60%; /* Set your desired height */
+    border: 1px solid #ccc; /* Optional: Add border for visualization */
+    background-color: rgb(0, 128, 128);
+}
+
+.left{
+    float: left;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    border-right: solid 1px silver;
+}
+
+.right{
+    float: right;
+    border-left: 1px black;
+}
+
+.left-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Set the height to 100% to ensure vertical centering */
+    width: 80%;
+}   
+
+.left-login h1 {
+    font-size: 200%;
+    width: 0%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.down{
+    padding-top: 10%;
+    padding-bottom: 10%;
+    text-align: center;
+}
+
+.login-form input{
+    background-color: ghostwhite;
+
+}
+
+.login-form input{
+    width: 150%;
+    height: 40px;
+    border-radius: 12px;
+    border: none;
+    text-align: center;
+
+}
+.log-in {
+    background-color: #3d9140; /* Set the background color */
+    border: none;
+    color: white;
+    padding: 8px 3px; /* Set the padding */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: 100%; /* Set the width to 100% to ensure it stays within the container */
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 12px; /* Set the border radius */
+    margin-top: 10%;
+}
+.log-in:hover {
+    background-color: #2a6e2c;
+}
+.logo{
+    width: 80%;
+    align-items: center;
+}
