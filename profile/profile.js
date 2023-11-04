@@ -12,6 +12,7 @@ showLoadingScreen();
 var uuid;
 var colleges;
 var sid;
+var user;
 // Define the headers for the request
 const headers = new Headers({
   'Content-Type': 'application/json',
@@ -39,11 +40,14 @@ fetch(getRequest)
 
     uuid = data.uuid;
     sid = data.sid;
+    user = data;
 
     console.log(uuid);
     console.log(SID);
+    
     displayUserInformation(data);
     displayProfilePicture(data.photo);
+    displayChangePassword(data.password);
 
 
     // Print the status code
@@ -128,7 +132,7 @@ function displayUserInformation(user) {
 
   dateOfBirthAbout.textContent = formattedDate;
 
-  genderAbout.textContent = user.gender === 0 ? 'Female' : 'Male';
+  genderAbout.textContent = user.gender == 0 ? 'Female' : 'Male';
   preferencesAbout.textContent = user.preferences;
   gradeAbout.textContent = user.grade;
   ageAbout.textContent = user.age;
@@ -216,6 +220,13 @@ function updateInformation() {
       const collageId = document.getElementById('residential-update').value;
       
       console.log(colleges);
+
+      updatedName.value = user.name;
+      updatedSid.value = user.sid;
+      updatedDob.value = user.dateOfBirth;
+      updatedGender.value = user.gender == 0 ? 'Female' : 'Male';
+      updatePreference.value = user.preferences;
+      updatedGrade.value = user.grade;
       
 
       const formData = {
@@ -381,3 +392,65 @@ function displayProfilePicture(pictures) {
   }
 
 }
+
+function displayChangePassword(password) {
+  Swal.fire({
+      title: 'Update Password',
+      html:
+          `
+          <div class="form">
+              <div class="form-element">
+                  <label for="fullname">Old Password</label>
+                  <input type="password" id="old-password" placeholder="Old Password" required>
+              </div>
+              <div class="form-element">
+                  <label for="date-of-birth">New Password</label>
+                  <input type="password" id="new-password" placeholder="New Password" required>
+              </div>
+              <div class="form-element">
+                  <label for="grade">Rewrite New Password</label>
+                  <input type="password" id="confirm-password" placeholder="Confirm New Password" required>
+              </div>
+          </div>
+          `,
+      showCancelButton: true,
+      confirmButtonText: 'Change Password',
+      preConfirm: () => {
+          const oldPassword = document.getElementById('old-password').value;
+          const newPassword = document.getElementById('new-password').value;
+          const confirmPassword = document.getElementById('confirm-password').value;
+
+          if (newPassword !== confirmPassword) {
+              Swal.showValidationMessage('New passwords do not match.');
+          } else {
+              
+              if (oldPassword == password) { // Replace 'yourOldPassword' with the actual old password check
+                  return fetch(uri_api + '/api/updateUserProfilePhoto/' + uuid, {
+                      method: 'POST',
+                      body: JSON.stringify({ oldPassword, newPassword }),
+                      headers: {
+                          'Content-Type': 'application/json',
+                      },
+                  })
+                      .then(response => {
+                          if (!response.ok) {
+                              throw new Error('Network response was not ok');
+                          }
+                          return response.json();
+                      })
+                      .catch(error => {
+                          Swal.showValidationMessage(`Password change failed: ${error.message}`);
+                      });
+              } else {
+                  Swal.showValidationMessage('Incorrect old password.');
+              }
+          }
+      },
+  }).then(result => {
+      if (result.isConfirmed) {
+          Swal.fire('Password Changed', 'Your password has been updated successfully.', 'success');
+      }
+  });
+}
+
+document.getElementById('change-password').addEventListener('click', displayChangePassword);
