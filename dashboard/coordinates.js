@@ -1,9 +1,11 @@
 
 import { uri_api } from "../global.js";
+// import { setUserInfo, getUserInfo } from "../global.js";
 
 console.log('Coordinates!')
 const apiUrl = uri_api + '/api/getAllBuilding';
-
+// const userInfo = getUserInfo();
+// console.log(userInfo);
 
 const backgroundImage = document.getElementById('campus-map');
 // Create an image map for clickable areas

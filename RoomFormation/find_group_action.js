@@ -1,4 +1,19 @@
+import { uri_api } from "../global.js";
+// import { setUserInfo, getUserInfo } from "../global.js";
 
+console.log("Find Group!!!");
+// const apiUrl = uri_api + '/api/login';
+
+// // Define the headers for the request
+// const headers = new Headers({
+//     'Content-Type': 'application/json',
+// });
+
+// // Create the request object
+// const getRequest = new Request(apiUrl, {
+//     method: 'GET',
+//     headers: headers,
+// });
 
 // fetch(getRequest)
 //     .then(response => {
@@ -13,7 +28,7 @@
 
 //         console.log('Response Body For Map:', data);
 
-//         displayGroupInfo(data.groups);
+//         // displayGroupInfo(data.groups);
 
 
 //         // Print the status code
@@ -47,8 +62,11 @@ function createGroupRoomForm() {
         title: 'Add Group',
         html: `
             <form id="add-mygroup">
-            <label for="group-name">Group name:</label>
-            <input type="text" id="group-name" name="group-name" required
+            <label for="group-name">Group Name:</label>
+            <input type="text" id="group-name" name="group-name" required>
+            <br>
+            <label for="student-id">Student ID:</label>
+            <input type="text" id="sid" name="student-id" required>
             </form>`,
         showCloseButton: true,
         showCancelButton: true,
@@ -57,9 +75,17 @@ function createGroupRoomForm() {
         cancelButtonText: 'Cancel'
     }).then((result) => {
         if (result.isConfirmed) {
-            Swal.fire(
-                'Succefully added!',
-            );
+            Swal.fire({
+                icon: 'success',
+                title: 'Added Successfully!',
+                text: 'You have successfully added a new group!',
+            });
+        }
+        else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Added Cancelled!',
+            });
         }
     });
 }
@@ -129,14 +155,22 @@ function inviteStudent(){
         cancelButtonText: 'Cancel'
     }).then((result) => {
         if (result.isConfirmed) {
-            Swal.fire(
-                'Invitation sent!',
-            );
+            Swal.fire({
+                icon: 'success',
+                title: 'Invitation Sent!',
+                text: 'You have invited a new student!',
+            });
+        }
+        else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Invitation Cancelled!',
+            });
         }
     });
 }
 
 //document.getElementById('invite-button').addEventListener('click', inviteStudent);
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('invite-button').addEventListener('click', inviteStudent);
-});
+// document.addEventListener('DOMContentLoaded', function() {
+//     document.getElementById('invite-button').addEventListener('click', inviteStudent);
+// });
