@@ -9,16 +9,25 @@
     <!-- <script src="../global.js" type="module" ></script> -->
     <script src="detail_script.js" type="module" defer></script>
     <!-- <script src="/global.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- google font line -->
+    <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+    rel="stylesheet"
+  />
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
 
 </head>
 
 <body>
 
-    <div id="loading-screen">
+    <!-- <div id="loading-screen">
         <div class="loader"></div>
         <p>Loading...</p>
-    </div>
+    </div> -->
 
     <header>
 
@@ -26,11 +35,43 @@
             <img src="./pics/zhiren_bgremoved.png">
         </div>
         <div class="header-right">
+        
             <ul>
                 <li id="search-std">Search Student</li>
                 <li id="search-room">Search Room</li>
-                <li id="profile">Profile</li>
-                <li id="logout">Logout</li>
+                <li id="chat">
+                    <span class="material-icons-outlined">chat</span>
+                </li>
+                <li id="notifications">
+                    <span class="material-icons-outlined">notifications</span>
+                </li>
+                <!-- <li id="profile">Profile</li>
+                <li id="logout">Logout</li> -->
+                <li id="profile">
+                    <img src="./pics/profile.png" class="profile" alt="">
+                    <ul>
+                       <li class="sub-item" id="go-profile">
+                        <span class="material-icons-outlined">manage_accounts</span>
+                        <p>profile</p>
+                       </li>
+                       <li class="sub-item" id="bookmark">
+                        <span class="material-icons-outlined">bookmark</span>
+                        <p>bookmark</p>
+                       </li>
+                       <li class="sub-item" id="mygroup">
+                        <span class="material-icons-outlined">group</span>
+                        <p>My Group</p>
+                       </li>
+                       <li class="sub-item" id="favorite">
+                        <span class="material-icons-outlined">favorite</span>
+                        <p>Favorite</p>
+                       </li>
+                       <li class="sub-item" id="logout">
+                        <span class="material-icons-outlined">logout</span>
+                        <p>Logout</p>
+                       </li>
+                    </ul>  
+                </li>
             </ul>
         
         <nav>
